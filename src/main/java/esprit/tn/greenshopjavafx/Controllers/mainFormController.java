@@ -1,8 +1,12 @@
 package esprit.tn.greenshopjavafx.Controllers;
+import esprit.tn.greenshopjavafx.Entities.Produit.Categorie;
+import esprit.tn.greenshopjavafx.Entities.Produit.Marque;
 import esprit.tn.greenshopjavafx.Entities.Produit.Produit;
 import esprit.tn.greenshopjavafx.Entities.customersData;
 import esprit.tn.greenshopjavafx.Entities.data;
 import esprit.tn.greenshopjavafx.Entities.productData;
+import esprit.tn.greenshopjavafx.Services.ProduitService.CategorieService;
+import esprit.tn.greenshopjavafx.Services.ProduitService.MarqueService;
 import esprit.tn.greenshopjavafx.Utils.DataSource;
 
 import esprit.tn.greenshopjavafx.Entities.productData;
@@ -32,11 +36,9 @@ import javafx.scene.control.Alert.AlertType;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -81,13 +83,13 @@ public class mainFormController implements Initializable {
     private TableColumn<productData, String> inventory_col_productName;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_type;
+    private TableColumn<productData, String> inventory_col_prix;
 
     @FXML
     private TableColumn<productData, String> inventory_col_stock;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_price;
+    private TableColumn<productData, String> inventory_col_quantity;
 
     @FXML
     private TableColumn<productData, String> inventory_col_status;
@@ -126,7 +128,7 @@ public class mainFormController implements Initializable {
     private ComboBox<?> inventory_status;
 
     @FXML
-    private ComboBox<?> inventory_type;
+    private ComboBox<String> inventory_marque;
 
     @FXML
     private AnchorPane menu_form;
@@ -214,6 +216,8 @@ public class mainFormController implements Initializable {
     private ResultSet result;
 
     private Image image;
+    MarqueService marqueService = new MarqueService();
+    CategorieService categorieService = new CategorieService();
 
     private ObservableList<productData> cardListData = FXCollections.observableArrayList();
 
@@ -347,9 +351,8 @@ public class mainFormController implements Initializable {
 
     public void inventoryAddBtn() {
 
-        if (inventory_productID.getText().isEmpty()
-                || inventory_productName.getText().isEmpty()
-                || inventory_type.getSelectionModel().getSelectedItem() == null
+        if (inventory_productName.getText().isEmpty()
+                || inventory_marque.getSelectionModel().getSelectedItem() == null
                 || inventory_stock.getText().isEmpty()
                 || inventory_price.getText().isEmpty()
                 || inventory_status.getSelectionModel().getSelectedItem() == null
@@ -364,7 +367,7 @@ public class mainFormController implements Initializable {
         } else {
 
             // CHECK PRODUCT ID
-            String checkProdID = "SELECT prod_id FROM product WHERE prod_id = '"
+            String checkProdID = "SELECT id FROM produit WHERE id = '"
                     + inventory_productID.getText() + "'";
 
             connect = DataSource.getInstance().getCon();
@@ -381,29 +384,31 @@ public class mainFormController implements Initializable {
                     alert.setContentText(inventory_productID.getText() + " is already taken");
                     alert.showAndWait();
                 } else {
-                    String insertData = "INSERT INTO product "
-                            + "(prod_id, prod_name, type, stock, price, status, image, date) "
+                    String insertData = "INSERT INTO produit "
+                            + "(nom, prix, stock, status, quantity, image,marque,categorie) "
                             + "VALUES(?,?,?,?,?,?,?,?)";
 
                     prepare = connect.prepareStatement(insertData);
-                    prepare.setString(1, inventory_productID.getText());
-                    prepare.setString(2, inventory_productName.getText());
-                    prepare.setString(3, (String) inventory_type.getSelectionModel().getSelectedItem());
-                    prepare.setString(4, inventory_stock.getText());
-                    prepare.setString(5, inventory_price.getText());
-                    prepare.setString(6, (String) inventory_status.getSelectionModel().getSelectedItem());
+                    prepare.setString(1, inventory_productName.getText());
+                    prepare.setDouble(2, Double.parseDouble(inventory_price.getText()));
+                    prepare.setInt(3, Integer.parseInt(inventory_stock.getText()));
+                    prepare.setString(4, (String) inventory_status.getSelectionModel().getSelectedItem());
+                    prepare.setInt(5, 0);
 
                     String path = data.path;
                     path = path.replace("\\", "\\\\");
 
-                    prepare.setString(7, path);
+                    prepare.setString(6, path);
 
-                    // TO GET CURRENT DATE
-                    Date date = new Date();
-                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-                    prepare.setString(8, String.valueOf(sqlDate));
-
+                    Marque marque;
+                    try {
+                        marque = marqueService.getByName(String.valueOf(inventory_marque.getSelectionModel().getSelectedItem()));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    prepare.setString(7, String.valueOf(marque.getId()));
+                    prepare.setInt(8,7);
                     prepare.executeUpdate();
 
                     alert = new Alert(AlertType.INFORMATION);
@@ -426,7 +431,7 @@ public class mainFormController implements Initializable {
 
         if (inventory_productID.getText().isEmpty()
                 || inventory_productName.getText().isEmpty()
-                || inventory_type.getSelectionModel().getSelectedItem() == null
+                || inventory_marque.getSelectionModel().getSelectedItem() == null
                 || inventory_stock.getText().isEmpty()
                 || inventory_price.getText().isEmpty()
                 || inventory_status.getSelectionModel().getSelectedItem() == null
@@ -442,16 +447,25 @@ public class mainFormController implements Initializable {
 
             String path = data.path;
             path = path.replace("\\", "\\\\");
-
-            String updateData = "UPDATE product SET "
-                    + "prod_id = '" + inventory_productID.getText() + "', prod_name = '"
-                    + inventory_productName.getText() + "', type = '"
-                    + inventory_type.getSelectionModel().getSelectedItem() + "', stock = '"
-                    + inventory_stock.getText() + "', price = '"
-                    + inventory_price.getText() + "', status = '"
+            Marque marque;
+            try {
+                 marque = marqueService.getByName(String.valueOf(inventory_marque.getSelectionModel().getSelectedItem()));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            String updateData = "UPDATE produit SET "
+                    + "id = '" + inventory_productID.getText() + "', nom = '"
+                    + inventory_productName.getText()
+                   // + "', type = '"
+                 //   + inventory_marque.getSelectionModel().getSelectedItem()
+                    + "', prix = '"
+                    + inventory_price.getText()
+                    + "', marque = '"
+                    + marque.getId()
+                    + "', stock = '"
+                    + inventory_stock.getText() + "', status = '"
                     + inventory_status.getSelectionModel().getSelectedItem() + "', image = '"
-                    + path + "', date = '"
-                    + data.date + "' WHERE id = " + data.id;
+                    + path + "' WHERE id = " + data.id;
 
             connect = DataSource.getInstance().getCon();
 
@@ -507,7 +521,7 @@ public class mainFormController implements Initializable {
             Optional<ButtonType> option = alert.showAndWait();
 
             if (option.get().equals(ButtonType.OK)) {
-                String deleteData = "DELETE FROM product WHERE id = " + data.id;
+                String deleteData = "DELETE FROM produit WHERE id = " + data.id;
                 try {
                     prepare = connect.prepareStatement(deleteData);
                     prepare.executeUpdate();
@@ -540,7 +554,7 @@ public class mainFormController implements Initializable {
 
         inventory_productID.setText("");
         inventory_productName.setText("");
-        inventory_type.getSelectionModel().clearSelection();
+        inventory_marque.getSelectionModel().clearSelection();
         inventory_stock.setText("");
         inventory_price.setText("");
         inventory_status.getSelectionModel().clearSelection();
@@ -552,17 +566,14 @@ public class mainFormController implements Initializable {
 
     // LETS MAKE A BEHAVIOR FOR IMPORT BTN FIRST
     public void inventoryImportBtn() {
-
         FileChooser openFile = new FileChooser();
-        openFile.getExtensionFilters().add(new ExtensionFilter("Open Image File", "*png", "*jpg"));
+        openFile.getExtensionFilters().add(new ExtensionFilter("Open Image File", "*.png", "*.jpg"));
 
         File file = openFile.showOpenDialog(main_form.getScene().getWindow());
 
         if (file != null) {
-
-            data.path = file.getAbsolutePath();
+            data.path = file.getName(); // Only the image file name with its extension
             image = new Image(file.toURI().toString(), 120, 127, false, true);
-
             inventory_imageView.setImage(image);
         }
     }
@@ -584,14 +595,17 @@ public class mainFormController implements Initializable {
             Produit prodData;
 
             while (result.next()) {
-                String status  = result.getBoolean("status") ? "Available" : "Unavailable";
+                Marque marque = marqueService.get(result.getInt("marque"));
+                Categorie categorie = categorieService.get(result.getInt("categorie"));
                 prodData = new Produit(result.getInt("id"),
                         result.getString("nom"),
                         result.getInt("prix"),
                         result.getInt("stock"),
                         result.getString("image"),
-                        result.getBoolean("status"),
-                        result.getInt("quantity"));
+                        result.getString("status"),
+                        result.getInt("quantity"),
+                        categorie,
+                        marque);
 
                 listData.add(prodData);
 
@@ -611,9 +625,10 @@ public class mainFormController implements Initializable {
 
         inventory_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
         inventory_col_productName.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        inventory_col_type.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        inventory_col_prix.setCellValueFactory(new PropertyValueFactory<>("prix"));
         inventory_col_stock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         inventory_col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+        inventory_col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         inventory_tableView.setItems(inventoryListData);
 
@@ -633,27 +648,53 @@ public class mainFormController implements Initializable {
         inventory_stock.setText(String.valueOf(prodData.getStock()));
         inventory_price.setText(String.valueOf(prodData.getPrix()));
 
-        data.path = prodData.getImage();
+        // Assuming the image is in the same package as this class (adjust the path accordingly)
+        String imagePath = "/esprit/tn/greenshopjavafx/image/" + prodData.getImage();
 
-        String path = "File:" + prodData.getImage();
+        // Use getClass().getResource() to load the image from the resources directory
+        URL imageUrl = getClass().getResource(imagePath);
+        data.path = prodData.getImage();
         data.id = prodData.getId();
 
-        image = new Image(path, 120, 127, false, true);
-        inventory_imageView.setImage(image);
+        if (imageUrl != null) {
+            image = new Image(imageUrl.toExternalForm(), 120, 127, false, true);
+            inventory_imageView.setImage(image);
+        } else {
+            // Handle the case where the image could not be loaded
+            System.out.println("Image not found: " + imagePath);
+        }
+        // Assuming you have a list of items in your ComboBox (adjust the type accordingly)
+        ObservableList<String> items = inventory_marque.getItems();
+
+        // Assuming prodData.getMarque() returns the value that should be selected in the ComboBox
+        String selectedMarque = prodData.getMarque().getNom();
+
+        // Check if the items list contains the selected value before setting it
+        if (items.contains(selectedMarque)) {
+            inventory_marque.setValue(selectedMarque);
+        }
     }
 
-    private String[] typeList = {"Meals", "Drinks"};
+    private ArrayList<Marque> brands;
 
-    public void inventoryTypeList() {
+    {
+        try {
+            brands = marqueService.readAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void inventoryBrandList() {
 
         List<String> typeL = new ArrayList<>();
 
-        for (String data : typeList) {
-            typeL.add(data);
+        for (Marque data : brands) {
+            typeL.add(data.getNom());
         }
 
         ObservableList listData = FXCollections.observableArrayList(typeL);
-        inventory_type.setItems(listData);
+        inventory_marque.setItems(listData);
     }
 
     private String[] statusList = {"Available", "Unavailable"};
@@ -1085,7 +1126,7 @@ public class mainFormController implements Initializable {
             menu_form.setVisible(false);
             customers_form.setVisible(false);
 
-            inventoryTypeList();
+            inventoryBrandList();
             inventoryStatusList();
             inventoryShowData();
         } else if (event.getSource() == menu_btn) {
@@ -1164,7 +1205,7 @@ public class mainFormController implements Initializable {
         dashboardIncomeChart();
         dashboardCustomerChart();
 
-        inventoryTypeList();
+        inventoryBrandList();
         inventoryStatusList();
         inventoryShowData();
 
@@ -1178,8 +1219,3 @@ public class mainFormController implements Initializable {
     }
 
 }
-
-
-// THATS IT FOR THIS VIDEO, THANKS FOR WATCHING!
-// SUBSCRIBE OUR CHANNEL FOR MORE UNIQUE TUTORIALS
-// THANK YOU!

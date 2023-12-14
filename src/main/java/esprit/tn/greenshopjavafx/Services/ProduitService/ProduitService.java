@@ -80,7 +80,7 @@ public class ProduitService implements IService<Produit> {
                 Categorie categorie = categorieService.get(resultSet.getInt("categorie"));
                 Marque marque = marqueService.get(resultSet.getInt("marque"));
 
-                Produit p = new Produit(id, nom, prix,1425,"fgfdgdfg" ,true,1425,categorie, marque);
+                Produit p = new Produit(id, nom, prix,1425,"fgfdgdfg" ,"true",1425,categorie, marque);
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -104,7 +104,7 @@ public class ProduitService implements IService<Produit> {
                 Categorie categorie = categorieService.get(resultSet.getInt("categorie"));
                 Marque marque = marqueService.get(resultSet.getInt("marque"));
 
-                return new Produit(id, nom, prix,1425,"fgfdgdfg" ,true,1425, categorie, marque);
+                return new Produit(id, nom, prix,1425,"fgfdgdfg" ,"true",1425, categorie, marque);
             }
         }
         return null;
@@ -123,7 +123,7 @@ public class ProduitService implements IService<Produit> {
                     double prix = resultSet.getDouble("prix");
                     String marqueNom = resultSet.getString("marque_nom");
 
-                    Produit p = new Produit(id, nom, prix,1425,"fgfdgdfg" ,true,1425, new Categorie(0, categorieNom), new Marque(0, marqueNom));
+                    Produit p = new Produit(id, nom, prix,1425,"fgfdgdfg" ,"true",1425, new Categorie(0, categorieNom), new Marque(0, marqueNom));
                     list.add(p);
                 }
             }
@@ -147,7 +147,7 @@ public class ProduitService implements IService<Produit> {
                     double prix = resultSet.getDouble("prix");
                     String categorieNom = resultSet.getString("categorie_nom");
 
-                    Produit p = new Produit(id, nom, prix,1425,"fgfdgdfg" ,true,1425, new Categorie(0, categorieNom), new Marque(0, marqueName));
+                    Produit p = new Produit(id, nom, prix,1425,"fgfdgdfg" ,"true",1425, new Categorie(0, categorieNom), new Marque(0, marqueName));
                     list.add(p);
                 }
             }

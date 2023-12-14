@@ -6,7 +6,7 @@ public class Produit {
     private double prix;
     private Integer stock;
     private String image;
-    private boolean status;
+    private String status;
 
     private Integer quantity;
 
@@ -14,7 +14,7 @@ public class Produit {
     private Marque marque;
 
 
-    public Produit(int id, String nom, double prix, Integer stock, String image, boolean status, Integer quantity, Categorie categorie, Marque marque) {
+    public Produit(int id, String nom, double prix, Integer stock, String image, String status, Integer quantity, Categorie categorie, Marque marque) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
@@ -25,7 +25,7 @@ public class Produit {
         this.categorie = categorie;
         this.marque = marque;
     }
-    public Produit(int id, String nom, double prix, Integer stock, String image, boolean status, Integer quantity) {
+    public Produit(int id, String nom, double prix, Integer stock, String image, String status, Integer quantity) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
@@ -34,7 +34,7 @@ public class Produit {
         this.status = status;
         this.quantity = quantity;
     }
-    public Produit(String nom, double prix, Integer stock, String image, boolean status, Integer quantity, Categorie categorie, Marque marque) {
+    public Produit(String nom, double prix, Integer stock, String image, String status, Integer quantity, Categorie categorie, Marque marque) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
@@ -102,11 +102,11 @@ public class Produit {
         this.image = image;
     }
 
-    public boolean isStatus() {
+    public String isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -81,5 +81,17 @@ public class MarqueService {
         }
         return null;
     }
+    public Marque getByName(String nom) throws SQLException {
+        String req = "SELECT * FROM marque WHERE nom = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(req)) {
+            preparedStatement.setString(1, nom);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                return new Marque(id, nom);
+            }
+        }
+        return null;
+    }
 }
 

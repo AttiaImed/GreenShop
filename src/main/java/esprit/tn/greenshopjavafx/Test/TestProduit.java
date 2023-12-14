@@ -89,7 +89,7 @@ public class TestProduit {
         Marque brand = new Marque(1, "Sony");
 
         // Add a product
-        Produit product = new Produit("TV", 599.99,54,"dfg",true,1425, category, brand);
+        Produit product = new Produit("TV", 599.99,54,"dfg","true",1425, category, brand);
         produitService.ajouter(product);
         System.out.println("Added Product: " + product);
 
