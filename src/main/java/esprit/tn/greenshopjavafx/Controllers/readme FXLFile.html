@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+This Java code appears to be part of a JavaFX application for user authentication and management. It includes functionalities such as user login, registration, password recovery, and changing passwords. Let me provide a brief explanation of the key components and actions in the code.
+
+1. **FXML Components:**
+The code uses JavaFX FXML for UI components. It defines various components such as `AnchorPane`, `TextField`, `PasswordField`, `Button`, `Hyperlink`, `ComboBox`, etc., representing different elements of the user interface.
+
+2. **Database Connection:**
+The application connects to a MySQL database using JDBC (Java Database Connectivity). It uses a `Connection` object (`connect`), `PreparedStatement`, and `ResultSet` for database operations.
+
+3. **Login (`loginBtn` method):**
+- It checks if the username and password fields are not empty.
+- Executes a SELECT query to validate the user's credentials against the database.
+- If the login is successful, it displays an information message, opens a new form (`mainForm.fxml`), and hides the login form.
+
+4. **Registration (`regBtn` method):**
+- Validates that all registration fields are filled.
+- Checks if the username is already taken in the database.
+- Inserts a new user record into the database if the username is available and the password meets the criteria.
+- Displays success or error messages accordingly.
+
+5. **Password Recovery (`proceedBtn` method):**
+- Verifies the user's information (username, security question, and answer) to proceed with password recovery.
+- If successful, shows a form (`np_newPassForm`) to enter a new password.
+
+6. **Changing Password (`changePassBtn` method):**
+- Checks if the new password matches the confirmation password.
+- Updates the password in the database if the conditions are met.
+- Displays success or error messages accordingly.
+
+7. **FXML Methods:**
+- `regLquestionList`: Populates the registration form's security question `ComboBox`.
+- `forgotPassQuestionList`: Populates the forgot password form's security question `ComboBox`.
+- `switchForgotPass`: Switches the form to the forgot password form.
+- `backToLoginForm` and `backToQuestionForm`: Navigates back to the login form or question form, respectively.
+- `switchForm`: Handles the sliding animation between the registration and login forms.
+
+8. **Initialize Method (`initialize`):**
+- This method is part of the `Initializable` interface and is called when the FXML file is loaded.
+- Currently, it does nothing (`// TODO`), but you might use it to perform additional setup when needed.
+
+**MySQL Tables:**
+Based on the code, it suggests the existence of a table named `employee`. Below is an example of how you might create the necessary table in MySQL:
+
+```sql
+CREATE TABLE employee (
+id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(255) UNIQUE NOT NULL,
+password VARCHAR(255) NOT NULL,
+question VARCHAR(255) NOT NULL,
+answer VARCHAR(255) NOT NULL,
+date DATE NOT NULL
+);
+```
+
+Note: This is a basic example, and you might need to modify it based on your specific requirements. Additionally, consider using hashing for storing passwords securely.
+
+Also, make sure to properly configure your MySQL database connection in the application (`DataSource` class or equivalent).
+</body>
+</html>
