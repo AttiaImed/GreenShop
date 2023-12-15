@@ -172,6 +172,7 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+
     public void regBtn() {
 
         if (su_username.getText().isEmpty() || su_password.getText().isEmpty()

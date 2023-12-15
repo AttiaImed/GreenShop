@@ -449,15 +449,15 @@ public class mainFormController implements Initializable {
             path = path.replace("\\", "\\\\");
             Marque marque;
             try {
-                 marque = marqueService.getByName(String.valueOf(inventory_marque.getSelectionModel().getSelectedItem()));
+                marque = marqueService.getByName(String.valueOf(inventory_marque.getSelectionModel().getSelectedItem()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             String updateData = "UPDATE produit SET "
                     + "id = '" + inventory_productID.getText() + "', nom = '"
                     + inventory_productName.getText()
-                   // + "', type = '"
-                 //   + inventory_marque.getSelectionModel().getSelectedItem()
+                    // + "', type = '"
+                    //   + inventory_marque.getSelectionModel().getSelectedItem()
                     + "', prix = '"
                     + inventory_price.getText()
                     + "', marque = '"
