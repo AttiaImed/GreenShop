@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1901599b-9450-451e-b5da-2c9fe00adf8a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Produit/Categorie.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Produit/Produit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Produit/Produit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/CategorieService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/TestProduit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/TestProduit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/FXMLDocument.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/FXMLDocument.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +109,7 @@
       <workItem from="1702580304612" duration="17086000" />
       <workItem from="1702643093997" duration="1607000" />
       <workItem from="1702976858479" duration="1696000" />
-      <workItem from="1703000122138" duration="3012000" />
+      <workItem from="1703000122138" duration="3531000" />
     </task>
     <servers />
   </component>

@@ -126,7 +126,6 @@ public class ProduitService implements IService<Produit> {
                     String image = resultSet.getString("image");
                     String status = resultSet.getString("status");
                     int quantity = resultSet.getInt("quantity");
-
                     Produit p = new Produit(id, nom, prix,stock,image ,status,quantity, new Marque(0, marqueName));
                     list.add(p);
                 }
