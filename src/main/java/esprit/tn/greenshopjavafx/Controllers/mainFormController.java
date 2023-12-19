@@ -64,12 +64,18 @@ public class mainFormController implements Initializable {
 
     @FXML
     private Button customers_btn;
+    @FXML
+    private Button stock_btn;
+
 
     @FXML
     private Button logout_btn;
 
     @FXML
     private AnchorPane inventory_form;
+
+    @FXML
+    private AnchorPane stock_form;
 
     @FXML
     private TableView<Produit> inventory_tableView;
@@ -187,6 +193,20 @@ public class mainFormController implements Initializable {
 
     @FXML
     private TableColumn<customersData, String> customers_col_cashier;
+    @FXML
+    private TableView<customersData> stock_tableView;
+
+    @FXML
+    private TableColumn<customersData, String> stock_col_stockID;
+
+    @FXML
+    private TableColumn<customersData, String> stock_col_total;
+
+    @FXML
+    private TableColumn<customersData, String> stock_col_date;
+
+    @FXML
+    private TableColumn<customersData, String> stock_col_cashier;
 
     @FXML
     private Label dashboard_NC;
@@ -217,11 +237,11 @@ public class mainFormController implements Initializable {
     MarqueService marqueService = new MarqueService();
     ProduitService produitService = new ProduitService();
 
-    private ObservableList<productData> cardListData = FXCollections.observableArrayList();
+    private ObservableList<Produit> cardListData = FXCollections.observableArrayList();
 
     public void dashboardDisplayNC() {
 
-        String sql = "SELECT COUNT(id) FROM produit";
+        String sql = "SELECT COUNT(id) FROM utilisateur";
         connect = DataSource.getInstance().getCon();
 
         try {
@@ -243,7 +263,7 @@ public class mainFormController implements Initializable {
         Date date = new Date();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-        String sql = "SELECT SUM(total) FROM receipt WHERE date = '"
+        String sql = "SELECT SUM(quantity) FROM produit WHERE date = '"
                 + sqlDate + "'";
 
         connect = DataSource.getInstance().getCon();
@@ -265,7 +285,7 @@ public class mainFormController implements Initializable {
     }
 
     public void dashboardTotalI() {
-        String sql = "SELECT SUM(total) FROM receipt";
+        String sql = "SELECT SUM(quantity) FROM receipt";
 
         connect = DataSource.getInstance().getCon();
 
@@ -286,8 +306,8 @@ public class mainFormController implements Initializable {
 
     public void dashboardNSP() {
 
-        String sql = "SELECT COUNT(quantity) FROM customer";
-
+        //String sql = "SELECT COUNT(quantity) FROM produit";
+        String sql = "SELECT SUM(quantity) FROM produit";
         connect = DataSource.getInstance().getCon();
 
         try {
@@ -296,7 +316,7 @@ public class mainFormController implements Initializable {
             result = prepare.executeQuery();
 
             if (result.next()) {
-                q = result.getInt("COUNT(quantity)");
+                q = result.getInt("SUM(quantity)");
             }
             dashboard_NSP.setText(String.valueOf(q));
 
@@ -371,17 +391,16 @@ public class mainFormController implements Initializable {
             connect = DataSource.getInstance().getCon();
 
             try {
+                Produit pExist = produitService.get(Integer.parseInt(inventory_productID.getText()));
 
-                statement = connect.createStatement();
-                result = statement.executeQuery(checkProdID);
-
-                if (result.next()) {
+                if (pExist != null) {
                     alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Error Message");
                     alert.setHeaderText(null);
                     alert.setContentText(inventory_productID.getText() + " is already taken");
                     alert.showAndWait();
-                } else {
+                } else
+                {
                     Marque marque;
                     try {
                         marque = marqueService.getByName(String.valueOf(inventory_marque.getSelectionModel().getSelectedItem()));
@@ -643,11 +662,11 @@ public class mainFormController implements Initializable {
 
     }
 
-    public ObservableList<productData> menuGetData() {
+    public ObservableList<Produit> menuGetData() {
 
         String sql = "SELECT * FROM produit";
 
-        ObservableList<productData> listData = FXCollections.observableArrayList();
+        ObservableList<Produit> listData = FXCollections.observableArrayList();
         connect = DataSource.getInstance().getCon();
 
         try {
@@ -657,16 +676,17 @@ public class mainFormController implements Initializable {
             productData prod;
 
             while (result.next()) {
-                prod = new productData(result.getInt("id"),
-                        result.getString("id"),
+                Marque m = marqueService.get(result.getInt("marque"));
+               Produit p1 = new Produit(result.getInt("id"),
                         result.getString("nom"),
-                        result.getString("prix"),
+                        result.getDouble("prix"),
                         result.getInt("stock"),
-                        result.getDouble("price"),
                         result.getString("image"),
-                        result.getDate("date"));
+                        result.getString("status"),
+                        result.getInt("quantity"),
+                        m);
 
-                listData.add(prod);
+                listData.add(p1);
             }
 
         } catch (Exception e) {
@@ -695,7 +715,7 @@ public class mainFormController implements Initializable {
                 load.setLocation(getClass().getResource("/esprit/tn/greenshopjavafx/cardProduct.fxml"));
                 AnchorPane pane = load.load();
                 cardProductController cardC = load.getController();
-                cardC.setData(cardListData.get(q));
+                //cardC.setData(cardListData.get(q));
 
                 if (column == 3) {
                     column = 0;
@@ -1036,6 +1056,17 @@ public class mainFormController implements Initializable {
         customers_tableView.setItems(customersListData);
     }
 
+    public void stockShowData() {
+        customersListData = customersDataList();
+
+        stock_col_stockID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        stock_col_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+        stock_col_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        stock_col_cashier.setCellValueFactory(new PropertyValueFactory<>("emUsername"));
+
+        stock_tableView.setItems(customersListData);
+    }
+
     public void switchForm(ActionEvent event) {
 
         if (event.getSource() == dashboard_btn) {
@@ -1076,6 +1107,14 @@ public class mainFormController implements Initializable {
             customers_form.setVisible(true);
 
             customersShowData();
+        }else if (event.getSource() == stock_btn) {
+            dashboard_form.setVisible(false);
+            inventory_form.setVisible(false);
+            menu_form.setVisible(false);
+            customers_form.setVisible(false);
+            stock_form.setVisible(true);
+
+            stockShowData();
         }
 
     }
@@ -1146,7 +1185,7 @@ public class mainFormController implements Initializable {
         menuShowOrderData();
 
         customersShowData();
-
+        stockShowData();
     }
 
 }
