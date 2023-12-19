@@ -10,11 +10,10 @@ public class Produit {
 
     private Integer quantity;
 
-    private Categorie categorie;
     private Marque marque;
 
 
-    public Produit(int id, String nom, double prix, Integer stock, String image, String status, Integer quantity, Categorie categorie, Marque marque) {
+    public Produit(int id, String nom, double prix, Integer stock, String image, String status, Integer quantity, Marque marque) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
@@ -22,7 +21,6 @@ public class Produit {
         this.image = image;
         this.status = status;
         this.quantity = quantity;
-        this.categorie = categorie;
         this.marque = marque;
     }
     public Produit(int id, String nom, double prix, Integer stock, String image, String status, Integer quantity) {
@@ -34,7 +32,7 @@ public class Produit {
         this.status = status;
         this.quantity = quantity;
     }
-    public Produit(String nom, double prix, Integer stock, String image, String status, Integer quantity, Categorie categorie, Marque marque) {
+    public Produit(String nom, double prix, Integer stock, String image, String status, Integer quantity, Marque marque) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
@@ -42,7 +40,6 @@ public class Produit {
         this.image = image;
         this.status = status;
         this.quantity = quantity;
-        this.categorie = categorie;
         this.marque = marque;
     }
 
@@ -68,14 +65,6 @@ public class Produit {
 
     public void setPrix(double prix) {
         this.prix = prix;
-    }
-
-    public Categorie getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
     }
 
     public Marque getMarque() {
@@ -128,7 +117,6 @@ public class Produit {
                 ", image='" + image + '\'' +
                 ", status=" + status +
                 ", quantity=" + quantity +
-                ", categorie=" + categorie +
                 ", marque=" + marque +
                 '}';
     }

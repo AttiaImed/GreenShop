@@ -1,16 +1,14 @@
 package esprit.tn.greenshopjavafx.Controllers;
-import esprit.tn.greenshopjavafx.Entities.Produit.Categorie;
 import esprit.tn.greenshopjavafx.Entities.Produit.Marque;
 import esprit.tn.greenshopjavafx.Entities.Produit.Produit;
 import esprit.tn.greenshopjavafx.Entities.customersData;
 import esprit.tn.greenshopjavafx.Entities.data;
 import esprit.tn.greenshopjavafx.Entities.productData;
-import esprit.tn.greenshopjavafx.Services.ProduitService.CategorieService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.MarqueService;
+import esprit.tn.greenshopjavafx.Services.ProduitService.ProduitService;
+
 import esprit.tn.greenshopjavafx.Utils.DataSource;
 
-import esprit.tn.greenshopjavafx.Entities.productData;
-import esprit.tn.greenshopjavafx.Utils.DataSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -217,13 +215,13 @@ public class mainFormController implements Initializable {
 
     private Image image;
     MarqueService marqueService = new MarqueService();
-    CategorieService categorieService = new CategorieService();
+    ProduitService produitService = new ProduitService();
 
     private ObservableList<productData> cardListData = FXCollections.observableArrayList();
 
     public void dashboardDisplayNC() {
 
-        String sql = "SELECT COUNT(id) FROM receipt";
+        String sql = "SELECT COUNT(id) FROM produit";
         connect = DataSource.getInstance().getCon();
 
         try {
@@ -384,32 +382,24 @@ public class mainFormController implements Initializable {
                     alert.setContentText(inventory_productID.getText() + " is already taken");
                     alert.showAndWait();
                 } else {
-                    String insertData = "INSERT INTO produit "
-                            + "(nom, prix, stock, status, quantity, image,marque,categorie) "
-                            + "VALUES(?,?,?,?,?,?,?,?)";
-
-                    prepare = connect.prepareStatement(insertData);
-                    prepare.setString(1, inventory_productName.getText());
-                    prepare.setDouble(2, Double.parseDouble(inventory_price.getText()));
-                    prepare.setInt(3, Integer.parseInt(inventory_stock.getText()));
-                    prepare.setString(4, (String) inventory_status.getSelectionModel().getSelectedItem());
-                    prepare.setInt(5, 0);
-
-                    String path = data.path;
-                    path = path.replace("\\", "\\\\");
-
-                    prepare.setString(6, path);
-
-
                     Marque marque;
                     try {
                         marque = marqueService.getByName(String.valueOf(inventory_marque.getSelectionModel().getSelectedItem()));
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
-                    prepare.setString(7, String.valueOf(marque.getId()));
-                    prepare.setInt(8,7);
-                    prepare.executeUpdate();
+                    String path = data.path;
+                    path = path.replace("\\", "\\\\");
+                    Produit p = new Produit(
+                            inventory_productName.getText(),
+                            Double.parseDouble(inventory_price.getText()),
+                            Integer.parseInt(inventory_stock.getText()),
+                            path,
+                            (String) inventory_status.getSelectionModel().getSelectedItem(),
+                            0,
+                            marque
+                    );
+                    produitService.ajouter(p);
 
                     alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("Error Message");
@@ -453,21 +443,8 @@ public class mainFormController implements Initializable {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            String updateData = "UPDATE produit SET "
-                    + "id = '" + inventory_productID.getText() + "', nom = '"
-                    + inventory_productName.getText()
-                    // + "', type = '"
-                    //   + inventory_marque.getSelectionModel().getSelectedItem()
-                    + "', prix = '"
-                    + inventory_price.getText()
-                    + "', marque = '"
-                    + marque.getId()
-                    + "', stock = '"
-                    + inventory_stock.getText() + "', status = '"
-                    + inventory_status.getSelectionModel().getSelectedItem() + "', image = '"
-                    + path + "' WHERE id = " + data.id;
 
-            connect = DataSource.getInstance().getCon();
+            Produit p = new Produit(Integer.parseInt(inventory_productID.getText()),inventory_productName.getText(),Double.parseDouble(inventory_price.getText()),Integer.parseInt(inventory_stock.getText()),path, (String) inventory_status.getSelectionModel().getSelectedItem(),0,marque);
 
             try {
 
@@ -478,9 +455,7 @@ public class mainFormController implements Initializable {
                 Optional<ButtonType> option = alert.showAndWait();
 
                 if (option.get().equals(ButtonType.OK)) {
-                    prepare = connect.prepareStatement(updateData);
-                    prepare.executeUpdate();
-
+                    produitService.update(p);
                     alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("Error Message");
                     alert.setHeaderText(null);
@@ -521,24 +496,15 @@ public class mainFormController implements Initializable {
             Optional<ButtonType> option = alert.showAndWait();
 
             if (option.get().equals(ButtonType.OK)) {
-                String deleteData = "DELETE FROM produit WHERE id = " + data.id;
                 try {
-                    prepare = connect.prepareStatement(deleteData);
-                    prepare.executeUpdate();
-
+                    produitService.delete(data.id);
                     alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Error Message");
                     alert.setHeaderText(null);
                     alert.setContentText("successfully Deleted!");
                     alert.showAndWait();
-
-                    // TO UPDATE YOUR TABLE VIEW
-                    inventoryShowData();
-                    // TO CLEAR YOUR FIELDS
-                    inventoryClearBtn();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             } else {
                 alert = new Alert(AlertType.ERROR);
@@ -578,50 +544,15 @@ public class mainFormController implements Initializable {
         }
     }
 
-    // MERGE ALL DATAS
-    public ObservableList<Produit> inventoryDataList() {
-
-        ObservableList<Produit> listData = FXCollections.observableArrayList();
-
-        String sql = "SELECT * FROM produit";
-
-        connect = DataSource.getInstance().getCon();
-
-        try {
-
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-
-            Produit prodData;
-
-            while (result.next()) {
-                Marque marque = marqueService.get(result.getInt("marque"));
-                Categorie categorie = categorieService.get(result.getInt("categorie"));
-                prodData = new Produit(result.getInt("id"),
-                        result.getString("nom"),
-                        result.getInt("prix"),
-                        result.getInt("stock"),
-                        result.getString("image"),
-                        result.getString("status"),
-                        result.getInt("quantity"),
-                        categorie,
-                        marque);
-
-                listData.add(prodData);
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return listData;
-    }
-
-    // TO SHOW DATA ON OUR TABLE
     private ObservableList<Produit> inventoryListData;
 
     public void inventoryShowData() {
-        inventoryListData = inventoryDataList();
+        try {
+            inventoryListData = FXCollections.observableArrayList();
+            inventoryListData.addAll(produitService.readAll());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         inventory_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
         inventory_col_productName.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -714,7 +645,7 @@ public class mainFormController implements Initializable {
 
     public ObservableList<productData> menuGetData() {
 
-        String sql = "SELECT * FROM product";
+        String sql = "SELECT * FROM produit";
 
         ObservableList<productData> listData = FXCollections.observableArrayList();
         connect = DataSource.getInstance().getCon();
@@ -727,9 +658,9 @@ public class mainFormController implements Initializable {
 
             while (result.next()) {
                 prod = new productData(result.getInt("id"),
-                        result.getString("prod_id"),
-                        result.getString("prod_name"),
-                        result.getString("type"),
+                        result.getString("id"),
+                        result.getString("nom"),
+                        result.getString("prix"),
                         result.getInt("stock"),
                         result.getDouble("price"),
                         result.getString("image"),
@@ -1166,7 +1097,7 @@ public class mainFormController implements Initializable {
                 logout_btn.getScene().getWindow().hide();
 
                 // LINK YOUR LOGIN FORM AND SHOW IT
-                Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/esprit/tn/greenshopjavafx/FXMLDocument.fxml"));
 
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);

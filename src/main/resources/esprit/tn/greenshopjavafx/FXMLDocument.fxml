@@ -87,8 +87,8 @@
                   </Label>
                   <Button fx:id="side_CreateBtn" layoutX="43.0" layoutY="346.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="220.0" styleClass="create-btn" stylesheets="@loginDesign.css" text="Create new Account" AnchorPane.bottomAnchor="14.0" />
                   <Button fx:id="side_alreadyHave" layoutX="43.0" layoutY="353.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="220.0" styleClass="create-btn" stylesheets="@loginDesign.css" text="Already have an Account" visible="false" />
-                  <FontAwesomeIcon fill="WHITE" glyphName="COFFEE" layoutX="89.0" layoutY="182.0" size="10em" />
-                  <Label layoutX="47.0" layoutY="200.0" text="Cafe Shop Management System" textFill="WHITE">
+                  <FontAwesomeIcon fill="WHITE" glyphName="FOOD" layoutX="89.0" layoutY="182.0" size="10em" />
+                  <Label layoutX="47.0" layoutY="200.0" text="Green Shop Management System" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
                      </font>

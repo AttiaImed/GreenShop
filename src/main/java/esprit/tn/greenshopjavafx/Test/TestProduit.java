@@ -1,10 +1,8 @@
 package esprit.tn.greenshopjavafx.Test;
 
 
-import esprit.tn.greenshopjavafx.Entities.Produit.Categorie;
 import esprit.tn.greenshopjavafx.Entities.Produit.Marque;
 import esprit.tn.greenshopjavafx.Entities.Produit.Produit;
-import esprit.tn.greenshopjavafx.Services.ProduitService.CategorieService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.MarqueService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.ProduitService;
 import java.sql.SQLException;
@@ -13,9 +11,6 @@ import java.util.ArrayList;
 public class TestProduit {
     public static void main(String[] args) {
         try {
-            // Test CategorieService
-            testCategorieService();
-
             // Test MarqueService
             testMarqueService();
 
@@ -27,32 +22,6 @@ public class TestProduit {
         }
     }
 
-    private static void testCategorieService() throws SQLException {
-        CategorieService categorieService = new CategorieService();
-
-        // Add a category
-        Categorie category = new Categorie("Electronics");
-        categorieService.ajouter(category);
-        System.out.println("Added Category: " + category);
-
-        // Update category name
-        category.setNom("Electronics Updated");
-        categorieService.update(category);
-        System.out.println("Updated Category: " + category);
-
-        // Get and print all categories
-        ArrayList<Categorie> categories = categorieService.readAll();
-        System.out.println("All Categories: " + categories);
-
-        // Get a specific category by ID
-        int categoryId = category.getId();
-        Categorie retrievedCategory = categorieService.get(categoryId);
-        System.out.println("Retrieved Category by ID " + categoryId + ": " + retrievedCategory);
-
-//        // Delete the category
-//        categorieService.delete(categoryId);
-//        System.out.println("Deleted Category with ID " + categoryId);
-    }
 
     private static void testMarqueService() throws SQLException {
         MarqueService marqueService = new MarqueService();
@@ -85,11 +54,10 @@ public class TestProduit {
         ProduitService produitService = new ProduitService();
 
         // Assuming you have Categorie and Marque objects
-        Categorie category = new Categorie(1, "Electronics");
         Marque brand = new Marque(1, "Sony");
 
         // Add a product
-        Produit product = new Produit("TV", 599.99,54,"dfg","true",1425, category, brand);
+        Produit product = new Produit("TV", 599.99,54,"dfg","true",1425, brand);
         produitService.ajouter(product);
         System.out.println("Added Product: " + product);
 
