@@ -4,37 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1901599b-9450-451e-b5da-2c9fe00adf8a" name="Changes" comment="ajouter stock">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Fournisseur/Fournisseur.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Panier/Commande.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Panier/PanierProduit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Utilisateur/UserType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/FournisseurService/FournisseurService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/CommandeService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/PanierProduitService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/Test_Fournisseur.java" afterDir="false" />
+    <list default="true" id="1901599b-9450-451e-b5da-2c9fe00adf8a" name="Changes" comment="Fussion du travail">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/FXMLDocumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/cardProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/cardProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/readme FXLFile.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Produit/Produit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Produit/Produit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Utilisateur/Administrateur.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Utilisateur/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Utilisateur/Utilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/customersData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/productData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/GreenShopSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/GreenShopSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/HelloApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/HelloController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/UtilisateurService/ServiceUtilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/UtilisateurService/ServiceUtilisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/TestProduit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/TestProduit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/Test_Utlisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Test/Test_Utlisateur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/FXMLDocument.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/AuthForm.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/mainForm.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/mainForm.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/CommandeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/CommandeService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +146,7 @@
       <workItem from="1703690199586" duration="6477000" />
       <workItem from="1703760189644" duration="9943000" />
       <workItem from="1703789478126" duration="3306000" />
-      <workItem from="1703804609117" duration="2342000" />
+      <workItem from="1703804609117" duration="3697000" />
     </task>
     <task id="LOCAL-00001" summary="base de donne">
       <option name="closed" value="true" />
@@ -189,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703018408555</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Fussion du travail">
+      <option name="closed" value="true" />
+      <created>1703808339978</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1703808339978</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -210,14 +193,15 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="base de donne" />
     <MESSAGE value="ajouter stock" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajouter stock" />
+    <MESSAGE value="Fussion du travail" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fussion du travail" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java</url>
-          <line>545</line>
+          <line>578</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

@@ -156,22 +156,6 @@ public class ProduitService implements IService<Produit> {
         return list;
     }
 
-    public int calculateNSPQuantity() {
-        String sql = "SELECT SUM(quantity) FROM produit";
 
-        try (Connection connection = DataSource.getInstance().getCon();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 0; // Return a default value or handle the absence of data
-    }
 
 }

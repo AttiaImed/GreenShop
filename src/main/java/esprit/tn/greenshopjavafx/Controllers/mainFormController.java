@@ -277,35 +277,68 @@ public class mainFormController implements Initializable {
     }
 
     public void dashboardDisplayTI() {
+        Date date = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+        String sql = "SELECT SUM(montant) FROM commande WHERE date = '"
+                + sqlDate + "'";
+
+        connect = DataSource.getInstance().getCon();
 
         try {
-            double ti = commandeService.calculateTISumForToday();
+            double ti = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            if (result.next()) {
+                ti = result.getDouble("SUM(montant)");
+            }
+
             dashboard_TI.setText("$" + ti);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void dashboardTotalI() {
+        String sql = "SELECT SUM(montant) FROM commande";
+
+        connect = DataSource.getInstance().getCon();
+
         try {
-            float totalI = commandeService.calculateTotalISum();
-            dashboard_TotalI.setText("$" + totalI);
+            float ti = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            if (result.next()) {
+                ti = result.getFloat("SUM(montant)");
+            }
+            dashboard_TotalI.setText("$" + ti);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public void dashboardNSP() {
+        String sql = "SELECT SUM(quantity) FROM produit";
+        connect = DataSource.getInstance().getCon();
 
         try {
-            int nspQuantity = produitService.calculateNSPQuantity();
-            dashboard_NSP.setText(String.valueOf(nspQuantity));
+            int q = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            if (result.next()) {
+                q = result.getInt("SUM(quantity)");
+            }
+            dashboard_NSP.setText(String.valueOf(q));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public void dashboardIncomeChart() {
         dashboard_incomeChart.getData().clear();

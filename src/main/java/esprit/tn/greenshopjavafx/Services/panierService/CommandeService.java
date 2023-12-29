@@ -5,10 +5,8 @@ import esprit.tn.greenshopjavafx.Entities.Panier.PanierProduit;
 import esprit.tn.greenshopjavafx.Services.IService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.MarqueService;
 import esprit.tn.greenshopjavafx.Utils.DataSource;
-import javafx.scene.chart.XYChart;
 
 import java.sql.*;
-import java.util.Date;
 import java.util.ArrayList;
 
 public class CommandeService implements IService<Commande> {
@@ -61,64 +59,4 @@ public class CommandeService implements IService<Commande> {
     public Commande get(int id) throws SQLException {
         return null;
     }
-    public double calculateTISumForToday() {
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
-        String sql = "SELECT SUM(montant) FROM commande WHERE date = ?";
-
-        try (Connection connection = DataSource.getInstance().getCon();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setDate(1, sqlDate);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getDouble(1);
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 0;
-    }
-
-    public float calculateTotalISum() {
-        String sql = "SELECT SUM(montant) FROM commande";
-
-        try (Connection connection = DataSource.getInstance().getCon();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            if (resultSet.next()) {
-                return resultSet.getFloat(1);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 0; // Return a default value or handle the absence of data
-    }
-    public XYChart.Series<String, Float> getIncomeChartData() {
-        String sql = "SELECT date, SUM(montant) FROM commande GROUP BY date ORDER BY TIMESTAMP(date)";
-        XYChart.Series<String, Float> chartData = new XYChart.Series<>();
-
-        try (Connection connection = DataSource.getInstance().getCon();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            while (resultSet.next()) {
-                chartData.getData().add(new XYChart.Data<>(resultSet.getString(1), resultSet.getFloat(2)));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return chartData;
-    }
-
 }

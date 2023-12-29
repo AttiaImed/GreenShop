@@ -36,7 +36,7 @@
                            <children>
                               <AnchorPane layoutX="11.0" layoutY="37.0" prefHeight="87.0" prefWidth="222.0" styleClass="header" stylesheets="@mainFormDesign.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label layoutX="5.0" layoutY="33.0" text="Cafe Shop Management System" textFill="WHITE">
+                                    <Label layoutX="5.0" layoutY="33.0" text="Green Shop Management System" textFill="WHITE">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
