@@ -56,5 +56,5 @@ To run the Green Shop Management System, follow these steps:
     ```
 
 5. The application will start, and you will be directed to the login page.
-6. 
+    
    ![login](https://github.com/attiaimed/GreenShop/assets/146118678/02164cac-8a98-4191-bbdf-2d2d1deb8acc)
