@@ -2,6 +2,11 @@
 
 Welcome to the Green Shop Management System! This JavaFX desktop application is designed for managing a green or eco-friendly products store.
 
+## Design Mockups
+    - Check out our design mockups on Canva: [Green Shop Canva Mockups](https://www.canva.com/design/DAFyFDf6jI8/OzUu81-2K7GRMGhQO1JVcg/edit?utm_content=DAFyFDf6jI8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+   
+    - Check out our design mockups on Canva: [Green Shop Canva Mockups](https://www.canva.com/design/DAFzTi6qcuw/cwOMPxnyzjyVUAC1OnV-aw/edit?utm_content=DAFzTi6qcuw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 ## Features
 
 1. **Login and Account Management:**
