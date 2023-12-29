@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.greenshopjavafx.Controllers.FXMLDocumentController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.greenshopjavafx.Controllers.AuthController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -37,9 +37,9 @@
                      </font>
                   </Label>
                   <TextField fx:id="su_username" layoutX="40.0" layoutY="121.0" onAction="#regBtn" prefHeight="30.0" prefWidth="220.0" promptText="Username" styleClass="textfield" stylesheets="@loginDesign.css" />
-                  <PasswordField fx:id="su_password" layoutX="40.0" layoutY="161.0" onAction="#regBtn" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textfield" stylesheets="@loginDesign.css" />
-                  <ComboBox fx:id="su_question" layoutX="40.0" layoutY="200.0" prefHeight="30.0" prefWidth="220.0" promptText="Question" styleClass="textfield" stylesheets="@loginDesign.css" />
-                  <TextField fx:id="su_answer" layoutX="40.0" layoutY="240.0" onAction="#regBtn" prefHeight="30.0" prefWidth="220.0" promptText="Answer" styleClass="textfield" stylesheets="@loginDesign.css" />
+                  <TextField fx:id="su_email" layoutX="40.0" layoutY="161.0" onAction="#regBtn" prefHeight="30.0" prefWidth="220.0" promptText="Email" styleClass="textfield" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="su_password" layoutX="40.0" layoutY="200.0" onAction="#regBtn" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textfield" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="su_Cpassword" layoutX="40.0" layoutY="240.0" onAction="#regBtn" prefHeight="30.0" prefWidth="220.0" promptText="CPassword" styleClass="textfield" stylesheets="@loginDesign.css" />
                   <Button fx:id="su_signupBtn" layoutX="40.0" layoutY="294.0" mnemonicParsing="false" onAction="#regBtn" prefHeight="40.0" prefWidth="220.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Sign Up" />
                </children>
             </AnchorPane>
@@ -52,8 +52,8 @@
                   </Label>
                   <Button fx:id="fp_proceedBtn" layoutX="40.0" layoutY="256.0" mnemonicParsing="false" onAction="#proceedBtn" prefHeight="40.0" prefWidth="220.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Proceed" />
                   <TextField fx:id="fp_username" layoutX="40.0" layoutY="127.0" prefHeight="30.0" prefWidth="220.0" promptText="Username" styleClass="textfield" stylesheets="@loginDesign.css" />
-                  <ComboBox fx:id="fp_question" layoutX="40.0" layoutY="167.0" prefHeight="30.0" prefWidth="220.0" promptText="Question" styleClass="textfield" stylesheets="@loginDesign.css" />
-                  <TextField fx:id="fp_answer" layoutX="40.0" layoutY="203.0" prefHeight="30.0" prefWidth="220.0" promptText="Answer" styleClass="textfield" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="fp_Password" layoutX="40.0" layoutY="192.0" onAction="#loginBtn" prefHeight="30.0" prefWidth="220.0" promptText="Password" styleClass="textfield" stylesheets="@loginDesign.css" />
+
                   <Button fx:id="fp_back" layoutX="116.0" layoutY="355.0" mnemonicParsing="false" onAction="#backToLoginForm" prefHeight="30.0" prefWidth="68.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Back">
                      <graphic>
                         <FontAwesomeIcon fill="WHITE" glyphName="ANGLE_LEFT" size="1.5em" />
@@ -87,7 +87,7 @@
                   </Label>
                   <Button fx:id="side_CreateBtn" layoutX="43.0" layoutY="346.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="220.0" styleClass="create-btn" stylesheets="@loginDesign.css" text="Create new Account" AnchorPane.bottomAnchor="14.0" />
                   <Button fx:id="side_alreadyHave" layoutX="43.0" layoutY="353.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="40.0" prefWidth="220.0" styleClass="create-btn" stylesheets="@loginDesign.css" text="Already have an Account" visible="false" />
-                  <FontAwesomeIcon fill="WHITE" glyphName="FOOD" layoutX="89.0" layoutY="182.0" size="10em" />
+                  <FontAwesomeIcon fill="WHITE" glyphName="TREE" layoutX="89.0" layoutY="182.0" size="10em" />
                   <Label layoutX="47.0" layoutY="200.0" text="Green Shop Management System" textFill="WHITE">
                      <font>
                         <Font size="15.0" />

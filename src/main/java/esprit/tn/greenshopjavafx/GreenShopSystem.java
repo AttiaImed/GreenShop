@@ -10,7 +10,7 @@ public class GreenShopSystem extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AuthForm.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
 

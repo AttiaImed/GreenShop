@@ -24,11 +24,15 @@ public class ProduitService implements IService<Produit> {
 
     @Override
     public void ajouter(Produit produit) throws SQLException {
-        String req = "INSERT INTO produit (nom, prix, marque) VALUES (?, ?, ?, ?)";
+        String req = "INSERT INTO produit (nom, prix,stock,image,status,quantity, marque,) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, produit.getNom());
             preparedStatement.setDouble(2, produit.getPrix());
-            preparedStatement.setInt(4, produit.getMarque().getId()); // Assuming you have getId() in Marque
+            preparedStatement.setInt(3, 0);
+            preparedStatement.setString(4, produit.getImage());
+            preparedStatement.setString(5, produit.getStatus());
+            preparedStatement.setInt(6, 0);
+            preparedStatement.setInt(7, produit.getMarque().getId()); // Assuming you have getId() in Marque
             int res = preparedStatement.executeUpdate();
 
             if (res > 0) {
@@ -42,12 +46,27 @@ public class ProduitService implements IService<Produit> {
 
     @Override
     public void update(Produit produit) throws SQLException {
-        String req = "UPDATE produit SET nom = ?, prix = ?, marque = ? WHERE id = ?";
+        String req = "UPDATE produit SET nom = ?, prix = ?, marque = ?,status = ?,image =? WHERE id = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(req)) {
             preparedStatement.setString(1, produit.getNom());
             preparedStatement.setDouble(2, produit.getPrix());
-            preparedStatement.setInt(4, produit.getMarque().getId()); // Assuming you have getId() in Marque
-            preparedStatement.setInt(5, produit.getId());
+            preparedStatement.setInt(3, produit.getMarque().getId());
+            preparedStatement.setString(4,produit.getStatus());
+            preparedStatement.setString(5, produit.getImage());
+            preparedStatement.setInt(6, produit.getId());
+            int res = preparedStatement.executeUpdate();
+        }catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    public void updateQuantity(int Quantity,int id_produit) throws SQLException {
+
+        String req = "UPDATE produit SET quantity = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(req)) {
+            Produit p= this.get(id_produit);
+            p.setQuantity(p.getQuantity()+Quantity);
+            preparedStatement.setInt(1, p.getQuantity());
+            preparedStatement.setInt(2, p.getId());
             int res = preparedStatement.executeUpdate();
         }catch (SQLException e) {
             System.out.println(e);
@@ -105,7 +124,7 @@ public class ProduitService implements IService<Produit> {
                 // Assuming you have methods to fetch Categorie and Marque based on their IDs
                 Marque marque = marqueService.get(resultSet.getInt("marque"));
 
-                Produit p = new Produit(id, nom, prix,stock,image ,status,quantity, marque);
+                return new Produit(id, nom, prix,stock,image ,status,quantity, marque);
             }
         }
         return null;
@@ -137,6 +156,22 @@ public class ProduitService implements IService<Produit> {
         return list;
     }
 
+    public int calculateNSPQuantity() {
+        String sql = "SELECT SUM(quantity) FROM produit";
 
+        try (Connection connection = DataSource.getInstance().getCon();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0; // Return a default value or handle the absence of data
+    }
 
 }

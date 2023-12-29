@@ -12,7 +12,7 @@ public class TestProduit {
     public static void main(String[] args) {
         try {
             // Test MarqueService
-            testMarqueService();
+            //testMarqueService();
 
             // Test ProduitService
             testProduitService();
@@ -58,7 +58,7 @@ public class TestProduit {
 
         // Add a product
         Produit product = new Produit("TV", 599.99,54,"dfg","true",1425, brand);
-        produitService.ajouter(product);
+       // produitService.ajouter(product);
         System.out.println("Added Product: " + product);
 
         // Update product details

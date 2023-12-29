@@ -120,4 +120,8 @@ public class Produit {
                 ", marque=" + marque +
                 '}';
     }
+
+    public String getStatus() {
+        return status;
+    }
 }

@@ -1,12 +1,16 @@
 package esprit.tn.greenshopjavafx.Controllers;
+import esprit.tn.greenshopjavafx.Entities.Fournisseur.Fournisseur;
+import esprit.tn.greenshopjavafx.Entities.Panier.Commande;
+import esprit.tn.greenshopjavafx.Entities.Panier.PanierProduit;
 import esprit.tn.greenshopjavafx.Entities.Produit.Marque;
 import esprit.tn.greenshopjavafx.Entities.Produit.Produit;
-import esprit.tn.greenshopjavafx.Entities.customersData;
 import esprit.tn.greenshopjavafx.Entities.data;
-import esprit.tn.greenshopjavafx.Entities.productData;
+import esprit.tn.greenshopjavafx.Services.FournisseurService.FournisseurService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.MarqueService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.ProduitService;
 
+import esprit.tn.greenshopjavafx.Services.UtilisateurService.ServiceUtilisateur;
+import esprit.tn.greenshopjavafx.Services.panierService.CommandeService;
 import esprit.tn.greenshopjavafx.Utils.DataSource;
 
 import javafx.collections.FXCollections;
@@ -33,10 +37,12 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -61,13 +67,8 @@ public class mainFormController implements Initializable {
 
     @FXML
     private Button menu_btn;
-
-    @FXML
-    private Button customers_btn;
     @FXML
     private Button stock_btn;
-
-
     @FXML
     private Button logout_btn;
 
@@ -81,22 +82,22 @@ public class mainFormController implements Initializable {
     private TableView<Produit> inventory_tableView;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_productID;
+    private TableColumn<Produit, String> inventory_col_productID;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_productName;
+    private TableColumn<Produit, String> inventory_col_productName;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_prix;
+    private TableColumn<Produit, String> inventory_col_prix;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_stock;
+    private TableColumn<Produit, String> inventory_col_stock;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_quantity;
+    private TableColumn<Produit, String> inventory_col_quantity;
 
     @FXML
-    private TableColumn<productData, String> inventory_col_status;
+    private TableColumn<Produit, String> inventory_col_status;
 
     @FXML
     private ImageView inventory_imageView;
@@ -144,16 +145,16 @@ public class mainFormController implements Initializable {
     private GridPane menu_gridPane;
 
     @FXML
-    private TableView<productData> menu_tableView;
+    private TableView<Produit> menu_tableView;
 
     @FXML
-    private TableColumn<productData, String> menu_col_productName;
+    private TableColumn<Produit, String> menu_col_productName;
 
     @FXML
-    private TableColumn<productData, String> menu_col_quantity;
+    private TableColumn<Produit, String> menu_col_quantity;
 
     @FXML
-    private TableColumn<productData, String> menu_col_price;
+    private TableColumn<Produit, String> menu_col_price;
 
     @FXML
     private Label menu_total;
@@ -177,38 +178,6 @@ public class mainFormController implements Initializable {
     private AnchorPane dashboard_form;
 
     @FXML
-    private AnchorPane customers_form;
-
-    @FXML
-    private TableView<customersData> customers_tableView;
-
-    @FXML
-    private TableColumn<customersData, String> customers_col_customerID;
-
-    @FXML
-    private TableColumn<customersData, String> customers_col_total;
-
-    @FXML
-    private TableColumn<customersData, String> customers_col_date;
-
-    @FXML
-    private TableColumn<customersData, String> customers_col_cashier;
-    @FXML
-    private TableView<customersData> stock_tableView;
-
-    @FXML
-    private TableColumn<customersData, String> stock_col_stockID;
-
-    @FXML
-    private TableColumn<customersData, String> stock_col_total;
-
-    @FXML
-    private TableColumn<customersData, String> stock_col_date;
-
-    @FXML
-    private TableColumn<customersData, String> stock_col_cashier;
-
-    @FXML
     private Label dashboard_NC;
 
     @FXML
@@ -226,6 +195,56 @@ public class mainFormController implements Initializable {
     @FXML
     private BarChart<?, ?> dashboard_CustomerChart;
 
+
+    //Fournisseur
+
+    @FXML
+    private Button searchButton;
+    @FXML
+    private Button fournisseur_btn;
+
+    @FXML
+    private AnchorPane fournisseurs_form;
+
+    @FXML
+    private TableView<Fournisseur> fournisseur_tableView;
+    @FXML
+    private TableColumn<Fournisseur, Integer> fournisseur_col_id;
+    @FXML
+    private TableColumn<Fournisseur, String> fournisseur_col_nom;
+    @FXML
+    private TableColumn<Fournisseur, String> fournisseur_col_prenom;
+    @FXML
+    private TableColumn<Fournisseur, String> fournisseur_col_email;
+    @FXML
+    private TableColumn<Fournisseur, String> fournisseur_col_adresse;
+    @FXML
+    private TableColumn<Fournisseur, Integer> fournisseur_col_phoneNumber;
+
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button updateFournisseurButton;
+    @FXML
+    private TextField searchTextField;
+
+
+
+    @FXML
+    private TextField nomTextField;
+    @FXML
+    private TextField prenomTextField;
+    @FXML
+    private TextField adresseTextField;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField phoneNumberTextField;
+
+
+
     private Alert alert;
 
     private Connection connect;
@@ -236,21 +255,19 @@ public class mainFormController implements Initializable {
     private Image image;
     MarqueService marqueService = new MarqueService();
     ProduitService produitService = new ProduitService();
-
+    CommandeService commandeService = new CommandeService();
+    FournisseurService fournisseurService = new FournisseurService();
+    ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
     private ObservableList<Produit> cardListData = FXCollections.observableArrayList();
 
     public void dashboardDisplayNC() {
 
-        String sql = "SELECT COUNT(id) FROM utilisateur";
-        connect = DataSource.getInstance().getCon();
-
         try {
             int nc = 0;
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
+            int count = serviceUtilisateur.count();
 
-            if (result.next()) {
-                nc = result.getInt("COUNT(id)");
+            if (count > 0) {
+                nc = count;
             }
             dashboard_NC.setText(String.valueOf(nc));
         } catch (Exception e) {
@@ -260,75 +277,40 @@ public class mainFormController implements Initializable {
     }
 
     public void dashboardDisplayTI() {
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
-        String sql = "SELECT SUM(quantity) FROM produit WHERE date = '"
-                + sqlDate + "'";
-
-        connect = DataSource.getInstance().getCon();
 
         try {
-            double ti = 0;
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-
-            if (result.next()) {
-                ti = result.getDouble("SUM(total)");
-            }
-
+            double ti = commandeService.calculateTISumForToday();
             dashboard_TI.setText("$" + ti);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void dashboardTotalI() {
-        String sql = "SELECT SUM(quantity) FROM receipt";
-
-        connect = DataSource.getInstance().getCon();
-
         try {
-            float ti = 0;
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-
-            if (result.next()) {
-                ti = result.getFloat("SUM(total)");
-            }
-            dashboard_TotalI.setText("$" + ti);
-
+            float totalI = commandeService.calculateTotalISum();
+            dashboard_TotalI.setText("$" + totalI);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public void dashboardNSP() {
 
-        //String sql = "SELECT COUNT(quantity) FROM produit";
-        String sql = "SELECT SUM(quantity) FROM produit";
-        connect = DataSource.getInstance().getCon();
-
         try {
-            int q = 0;
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-
-            if (result.next()) {
-                q = result.getInt("SUM(quantity)");
-            }
-            dashboard_NSP.setText(String.valueOf(q));
-
+            int nspQuantity = produitService.calculateNSPQuantity();
+            dashboard_NSP.setText(String.valueOf(nspQuantity));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public void dashboardIncomeChart() {
         dashboard_incomeChart.getData().clear();
 
-        String sql = "SELECT date, SUM(total) FROM receipt GROUP BY date ORDER BY TIMESTAMP(date)";
+        String sql = "SELECT date, SUM(montant) FROM commande GROUP BY date ORDER BY TIMESTAMP(date)";
         connect = DataSource.getInstance().getCon();
         XYChart.Series chart = new XYChart.Series();
         try {
@@ -349,7 +331,7 @@ public class mainFormController implements Initializable {
     public void dashboardCustomerChart(){
         dashboard_CustomerChart.getData().clear();
 
-        String sql = "SELECT date, COUNT(id) FROM receipt GROUP BY date ORDER BY TIMESTAMP(date)";
+        String sql = "SELECT Date_inscription as date, COUNT(id) FROM utilisateur GROUP BY date ORDER BY Date_inscription";
         connect = DataSource.getInstance().getCon();
         XYChart.Series chart = new XYChart.Series();
         try {
@@ -673,7 +655,7 @@ public class mainFormController implements Initializable {
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
 
-            productData prod;
+            Produit prod;
 
             while (result.next()) {
                 Marque m = marqueService.get(result.getInt("marque"));
@@ -715,7 +697,7 @@ public class mainFormController implements Initializable {
                 load.setLocation(getClass().getResource("/esprit/tn/greenshopjavafx/cardProduct.fxml"));
                 AnchorPane pane = load.load();
                 cardProductController cardC = load.getController();
-                //cardC.setData(cardListData.get(q));
+                cardC.setData(cardListData.get(q));
 
                 if (column == 3) {
                     column = 0;
@@ -731,56 +713,25 @@ public class mainFormController implements Initializable {
             }
         }
     }
-
-    public ObservableList<productData> menuGetOrder() {
-        customerID();
-        ObservableList<productData> listData = FXCollections.observableArrayList();
-
-        String sql = "SELECT * FROM customer WHERE customer_id = " + cID;
-
-        connect = DataSource.getInstance().getCon();
-
-        try {
-
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-
-            productData prod;
-
-            while (result.next()) {
-                prod = new productData(result.getInt("id"),
-                        result.getString("prod_id"),
-                        result.getString("prod_name"),
-                        result.getString("type"),
-                        result.getInt("quantity"),
-                        result.getDouble("price"),
-                        result.getString("image"),
-                        result.getDate("date"));
-                listData.add(prod);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return listData;
-    }
-
-    private ObservableList<productData> menuOrderListData;
-
     public void menuShowOrderData() {
-        menuOrderListData = menuGetOrder();
+        customerID();
+        ObservableList<Produit> listData = FXCollections.observableArrayList();
+        listData.addAll(PanierProduit.getProductListProperty());
 
-        menu_col_productName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        // Set up your table columns
+        menu_col_productName.setCellValueFactory(new PropertyValueFactory<>("nom"));
         menu_col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        menu_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        menu_col_price.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        // Set the items directly to the TableView
+        menu_tableView.setItems(listData);
+        menu_tableView.refresh();
 
-        menu_tableView.setItems(menuOrderListData);
+        System.out.println(listData);
     }
     private int getid;
 
     public void menuSelectOrder() {
-        productData prod = menu_tableView.getSelectionModel().getSelectedItem();
+        Produit prod = menu_tableView.getSelectionModel().getSelectedItem();
         int num = menu_tableView.getSelectionModel().getSelectedIndex();
 
         if ((num - 1) < -1) {
@@ -792,38 +743,20 @@ public class mainFormController implements Initializable {
     }
 
     private double totalP;
-
     public void menuGetTotal() {
         customerID();
-        String total = "SELECT SUM(price) FROM customer WHERE customer_id = " + cID;
-
-        connect = DataSource.getInstance().getCon();
-
-        try {
-
-            prepare = connect.prepareStatement(total);
-            result = prepare.executeQuery();
-
-            if (result.next()) {
-                totalP = result.getDouble("SUM(price)");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        totalP = PanierProduit.calculateTotalPrice();
     }
 
     public void menuDisplayTotal() {
-        menuGetTotal();
-        menu_total.setText("$" + totalP);
+        totalP = PanierProduit.calculateTotalPrice();
+        menu_total.setText("$" + PanierProduit.calculateTotalPrice());
     }
 
     private double amount;
     private double change;
 
     public void menuAmount() {
-        menuGetTotal();
         if (menu_amount.getText().isEmpty() || totalP == 0) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
@@ -843,7 +776,7 @@ public class mainFormController implements Initializable {
 
     public void menuPayBtn() {
 
-        if (totalP == 0) {
+        if (PanierProduit.calculateTotalPrice() == 0) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
@@ -851,14 +784,9 @@ public class mainFormController implements Initializable {
             alert.showAndWait();
         } else {
             menuGetTotal();
-            String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username) "
-                    + "VALUES(?,?,?,?)";
-
-            connect = DataSource.getInstance().getCon();
 
             try {
-
-                if (amount == 0) {
+                if (false) {
                     alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Error Messaged");
                     alert.setHeaderText(null);
@@ -874,17 +802,10 @@ public class mainFormController implements Initializable {
                     if (option.get().equals(ButtonType.OK)) {
                         customerID();
                         menuGetTotal();
-                        prepare = connect.prepareStatement(insertPay);
-                        prepare.setString(1, String.valueOf(cID));
-                        prepare.setString(2, String.valueOf(totalP));
-
                         Date date = new Date();
                         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
-                        prepare.setString(3, String.valueOf(sqlDate));
-                        prepare.setString(4, data.username);
-
-                        prepare.executeUpdate();
+                        Commande c  = new Commande( totalP, Integer.parseInt(String.valueOf(cID)),String.valueOf(sqlDate));
+                        commandeService.ajouter(c);
 
                         alert = new Alert(AlertType.INFORMATION);
                         alert.setTitle("Infomation Message");
@@ -911,7 +832,6 @@ public class mainFormController implements Initializable {
     }
 
     public void menuRemoveBtn() {
-
         if (getid == 0) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
@@ -919,8 +839,6 @@ public class mainFormController implements Initializable {
             alert.setContentText("Please select the order you want to remove");
             alert.showAndWait();
         } else {
-            String deleteData = "DELETE FROM customer WHERE id = " + getid;
-            connect = DataSource.getInstance().getCon();
             try {
                 alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Message");
@@ -929,8 +847,8 @@ public class mainFormController implements Initializable {
                 Optional<ButtonType> option = alert.showAndWait();
 
                 if (option.get().equals(ButtonType.OK)) {
-                    prepare = connect.prepareStatement(deleteData);
-                    prepare.executeUpdate();
+                    PanierProduit.removeProductById(getid);
+                    menuShowOrderData();
                 }
 
                 menuShowOrderData();
@@ -943,23 +861,31 @@ public class mainFormController implements Initializable {
 
     public void menuReceiptBtn() {
 
-        if (totalP == 0 || menu_amount.getText().isEmpty()) {
+        if (PanierProduit.calculateTotalPrice() == 0 ) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setContentText("Please order first");
             alert.showAndWait();
         } else {
-            HashMap map = new HashMap();
+            HashMap<String, Object> map = new HashMap<>();
             map.put("getReceipt", (cID - 1));
-
+            connect = DataSource.getInstance().getCon();
             try {
 
-                JasperDesign jDesign = JRXmlLoader.load("C:\\Users\\WINDOWS 10\\Documents\\NetBeansProjects\\cafeShopManagementSystem\\src\\cafeshopmanagementsystem\\report.jrxml");
+                // Load the JRXML file from the resources folder
+                InputStream inputStream = getClass().getResourceAsStream("/esprit/tn/greenshopjavafx/report.jrxml");
+                JasperDesign jDesign = JRXmlLoader.load(inputStream);
+
+                // Compile the JRXML file into a JasperReport object
                 JasperReport jReport = JasperCompileManager.compileReport(jDesign);
+
+                // Fill the JasperReport with data and obtain a JasperPrint object
                 JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
 
+                // Display the JasperPrint in a JasperViewer
                 JasperViewer.viewReport(jPrint, false);
 
+                // Restart the menu (possibly clearing the shopping cart)
                 menuRestart();
 
             } catch (Exception e) {
@@ -983,7 +909,7 @@ public class mainFormController implements Initializable {
 
     public void customerID() {
 
-        String sql = "SELECT MAX(customer_id) FROM customer";
+        String sql = "SELECT MAX(id) FROM utilisateur";
         connect = DataSource.getInstance().getCon();
 
         try {
@@ -991,10 +917,10 @@ public class mainFormController implements Initializable {
             result = prepare.executeQuery();
 
             if (result.next()) {
-                cID = result.getInt("MAX(customer_id)");
+                cID = result.getInt("MAX(id)");
             }
 
-            String checkCID = "SELECT MAX(customer_id) FROM receipt";
+            String checkCID = "SELECT MAX(customer_id) FROM commande";
             prepare = connect.prepareStatement(checkCID);
             result = prepare.executeQuery();
             int checkID = 0;
@@ -1015,57 +941,183 @@ public class mainFormController implements Initializable {
         }
     }
 
-    public ObservableList<customersData> customersDataList() {
 
-        ObservableList<customersData> listData = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM receipt";
-        connect = DataSource.getInstance().getCon();
-
+    //Fournisseur
+    private void configureTableViewColumns() {
+        fournisseur_col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        fournisseur_col_nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        fournisseur_col_prenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+        fournisseur_col_email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        fournisseur_col_adresse.setCellValueFactory(new PropertyValueFactory<>("adresse"));
+    }
+    private void setupAddButton() {
+        addButton.setOnAction(e -> {
+            addFournisseurFromInputFields();
+            refreshTableView(); // Rafraîchir la TableView après l'ajout
+        });
+    }
+    private void refreshTableView() {
         try {
-
-            prepare = connect.prepareStatement(sql);
-            result = prepare.executeQuery();
-            customersData cData;
-
-            while (result.next()) {
-                cData = new customersData(result.getInt("id"),
-                        result.getInt("customer_id"),
-                        result.getDouble("total"),
-                        result.getDate("date"),
-                        result.getString("em_username"));
-
-                listData.add(cData);
-            }
-
-        } catch (Exception e) {
+            List<Fournisseur> allFournisseurs = fournisseurService.readAll();
+            fournisseur_tableView.getItems().setAll(allFournisseurs);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return listData;
     }
 
-    private ObservableList<customersData> customersListData;
-
-    public void customersShowData() {
-        customersListData = customersDataList();
-
-        customers_col_customerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        customers_col_total.setCellValueFactory(new PropertyValueFactory<>("total"));
-        customers_col_date.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customers_col_cashier.setCellValueFactory(new PropertyValueFactory<>("emUsername"));
-
-        customers_tableView.setItems(customersListData);
+    private boolean isValidInput() {
+        // Vérifie si les champs sont remplis correctement avant l'ajout
+        return !nomTextField.getText().isEmpty() && !prenomTextField.getText().isEmpty();
     }
 
-    public void stockShowData() {
-        customersListData = customersDataList();
-
-        stock_col_stockID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        stock_col_total.setCellValueFactory(new PropertyValueFactory<>("total"));
-        stock_col_date.setCellValueFactory(new PropertyValueFactory<>("date"));
-        stock_col_cashier.setCellValueFactory(new PropertyValueFactory<>("emUsername"));
-
-        stock_tableView.setItems(customersListData);
+    private void clearInputFields() {
+        nomTextField.clear();
+        prenomTextField.clear();
+        adresseTextField.clear();
+        emailTextField.clear();
+        phoneNumberTextField.clear();
     }
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    //Ajouter fournisseur
+    @FXML
+    private void addFournisseurFromInputFields() {
+        if (!isValidInput()) {
+            // Affichage d'une alerte JavaFX pour indiquer que tous les champs doivent être remplis
+            showAlert(Alert.AlertType.ERROR, "Champs manquants", "Veuillez remplir tous les champs.");
+            return;
+        }try {
+            // Créer un nouvel objet Fournisseur avec les données de l'interface utilisateur
+            Fournisseur newFournisseur = new Fournisseur();
+            newFournisseur.setNom(nomTextField.getText());
+            newFournisseur.setPrenom(prenomTextField.getText());
+            newFournisseur.setAdresse(adresseTextField.getText());
+            newFournisseur.setEmail(emailTextField.getText());
+            newFournisseur.setPhonenumber(Integer.parseInt(phoneNumberTextField.getText()));
+            // Ajouter le nouveau fournisseur
+            fournisseurService.ajouter(newFournisseur);
+            // Mettez à jour la TableView pour afficher le nouveau fournisseur
+            refreshTableView();
+            // Réinitialiser les champs après l'ajout
+            clearInputFields();
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
+            // Gérer l'exception (par exemple, afficher un message d'erreur)
+        }
+    }
+
+    //Supprimer fournisseur
+    @FXML
+    private void deleteFournisseur() {
+        Fournisseur selectedFournisseur = fournisseur_tableView.getSelectionModel().getSelectedItem();
+        if (selectedFournisseur == null) {
+            // Affichage d'une alerte JavaFX pour indiquer qu'un fournisseur doit être sélectionné
+            showAlert(Alert.AlertType.WARNING, "Aucun fournisseur sélectionné", "Veuillez sélectionner un fournisseur à supprimer.");
+            return;
+        }
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation de suppression");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Voulez-vous vraiment supprimer ce fournisseur ?");
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                fournisseurService.delete(selectedFournisseur.getId());
+                refreshTableView(); // Rafraîchir la TableView après la suppression
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //Modifier fournisseur
+    @FXML
+    private void updateFournisseurButton() {
+        Fournisseur selectedFournisseur = fournisseur_tableView.getSelectionModel().getSelectedItem();
+        if (selectedFournisseur == null) {
+            showAlert(Alert.AlertType.WARNING, "Aucun fournisseur sélectionné", "Veuillez sélectionner un fournisseur à modifier.");
+            return;
+        }if (!isValidInput()) {
+            showAlert(Alert.AlertType.ERROR, "Champs manquants", "Veuillez remplir tous les champs.");
+            return;
+        }try {
+            // Créer un nouvel objet Fournisseur avec les données de l'interface utilisateur
+            Fournisseur updatedFournisseur = new Fournisseur();
+            updatedFournisseur.setId(selectedFournisseur.getId());
+            updatedFournisseur.setNom(nomTextField.getText());
+            updatedFournisseur.setPrenom(prenomTextField.getText());
+            updatedFournisseur.setAdresse(adresseTextField.getText());
+            updatedFournisseur.setEmail(emailTextField.getText());
+            updatedFournisseur.setPhonenumber(Integer.parseInt(phoneNumberTextField.getText()));
+            // Mettre à jour le fournisseur
+            fournisseurService.update(updatedFournisseur);
+            // Mettre à jour la TableView pour afficher le fournisseur mis à jour
+            refreshTableView();
+            // Réinitialiser les champs après la modification
+            clearInputFields();
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
+            // Gérer l'exception (par exemple, afficher un message d'erreur)
+        }
+    }
+    //Rechercher fournisseur
+    @FXML
+    private void handleRechercherFournisseur(ActionEvent event) {
+        String nom = nomTextField.getText();
+        String prenom = prenomTextField.getText();
+        if (nom.isEmpty() && prenom.isEmpty()) {
+            refreshTableView();
+            return;
+        }try {
+            // Rechercher les fournisseurs correspondant au nom et prénom saisis dans les champs de recherche
+            List<Fournisseur> fournisseurs = fournisseurService.consulter(nom, prenom);
+            if (!fournisseurs.isEmpty()) {
+                // Afficher les fournisseurs trouvés dans la TableView
+                fournisseur_tableView.getItems().setAll(fournisseurs);
+            } else {
+                // Affichage d'une alerte JavaFX pour indiquer qu'aucun fournisseur n'a été trouvé
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Aucun fournisseur trouvé");
+                alert.setHeaderText(null);
+                alert.setContentText("Aucun fournisseur n'a été trouvé pour le nom et prénom saisis.");
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Contacter fournisseur
+    @FXML
+    private void handleContacterButton(ActionEvent event) {
+        String fournisseurNom = nomTextField.getText(); // Récupérez le nom du fournisseur
+
+        try {
+            List<Integer> phoneNumbers = fournisseurService.getPhoneNumbersByNom(fournisseurNom);
+
+            if (!phoneNumbers.isEmpty()) {
+                // Afficher les numéros de téléphone dans une boîte de dialogue ou tout autre composant
+                String phoneNumbersString = String.join(", ", phoneNumbers.stream().map(Object::toString).collect(Collectors.toList()));
+                showAlert(Alert.AlertType.INFORMATION, "Numéros de téléphone", "Numéros de téléphone : " + phoneNumbersString);
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "Aucun numéro de téléphone", "Aucun numéro de téléphone trouvé pour le fournisseur : " + fournisseurNom);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    //End Fournisseur
+
+
+
+
 
     public void switchForm(ActionEvent event) {
 
@@ -1073,8 +1125,8 @@ public class mainFormController implements Initializable {
             dashboard_form.setVisible(true);
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
-            customers_form.setVisible(false);
-
+            fournisseurs_form.setVisible(false);
+            stock_form.setVisible(false);
             dashboardDisplayNC();
             dashboardDisplayTI();
             dashboardTotalI();
@@ -1086,8 +1138,8 @@ public class mainFormController implements Initializable {
             dashboard_form.setVisible(false);
             inventory_form.setVisible(true);
             menu_form.setVisible(false);
-            customers_form.setVisible(false);
-
+            fournisseurs_form.setVisible(false);
+            stock_form.setVisible(false);
             inventoryBrandList();
             inventoryStatusList();
             inventoryShowData();
@@ -1095,26 +1147,31 @@ public class mainFormController implements Initializable {
             dashboard_form.setVisible(false);
             inventory_form.setVisible(false);
             menu_form.setVisible(true);
-            customers_form.setVisible(false);
-
+            fournisseurs_form.setVisible(false);
+            stock_form.setVisible(false);
             menuDisplayCard();
             menuDisplayTotal();
             menuShowOrderData();
-        } else if (event.getSource() == customers_btn) {
-            dashboard_form.setVisible(false);
-            inventory_form.setVisible(false);
-            menu_form.setVisible(false);
-            customers_form.setVisible(true);
 
-            customersShowData();
         }else if (event.getSource() == stock_btn) {
             dashboard_form.setVisible(false);
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
-            customers_form.setVisible(false);
-            stock_form.setVisible(true);
 
-            stockShowData();
+            stock_form.setVisible(true);
+            fournisseurs_form.setVisible(false);
+
+        }
+        else if (event.getSource() == fournisseur_btn) {
+            dashboard_form.setVisible(false);
+            inventory_form.setVisible(false);
+            menu_form.setVisible(false);
+            stock_form.setVisible(false);
+            fournisseurs_form.setVisible(true);
+
+            setupAddButton();
+            configureTableViewColumns();
+            refreshTableView();
         }
 
     }
@@ -1136,12 +1193,12 @@ public class mainFormController implements Initializable {
                 logout_btn.getScene().getWindow().hide();
 
                 // LINK YOUR LOGIN FORM AND SHOW IT
-                Parent root = FXMLLoader.load(getClass().getResource("/esprit/tn/greenshopjavafx/FXMLDocument.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/esprit/tn/greenshopjavafx/AuthForm.fxml"));
 
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
 
-                stage.setTitle("Cafe Shop Management System");
+                stage.setTitle("Green Shop Management System");
 
                 stage.setScene(scene);
                 stage.show();
@@ -1180,12 +1237,17 @@ public class mainFormController implements Initializable {
         inventoryShowData();
 
         menuDisplayCard();
-        menuGetOrder();
         menuDisplayTotal();
         menuShowOrderData();
 
-        customersShowData();
-        stockShowData();
+
+
+
+        //Fournisseur
+        setupAddButton();
+        configureTableViewColumns();
+        refreshTableView();
+        searchButton.setOnAction(e -> handleRechercherFournisseur(null));
     }
 
 }

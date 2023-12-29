@@ -1,28 +1,34 @@
 package esprit.tn.greenshopjavafx.Entities.Utilisateur;
 
+import java.util.Date;
+import java.time.LocalDate;
+
 public class Utilisateur {
+
     private int id;
     private String nom;
-    private String prenom;
     private String username;
     private String email;
     private String password;
+    private UserType userType;
+    private LocalDate dateInscription;
 
-    public Utilisateur(int id, String nom, String prenom, String email, String password) {
+    public Utilisateur(int id, String nom,  String email, String password, UserType userType) {
         this.id = id;
         this.nom = nom;
-        this.prenom = prenom;
         this.email = email;
         this.password = password;
+        this.userType = userType;
+        this.dateInscription = LocalDate.now();
     }
 
-    public Utilisateur(String nom, String prenom,String username, String email, String password) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
+     public Utilisateur(String nom,  String email, String password, UserType userType) {
+         this.nom = nom;
+         this.email = email;
+         this.password = password;
+         this.userType = userType;
+         this.dateInscription = LocalDate.now();
+     }
 
     public int getId() {
         return id;
@@ -40,13 +46,6 @@ public class Utilisateur {
         this.nom = nom;
     }
 
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
     public String getUsername() {
         return username;
     }
@@ -68,16 +67,33 @@ public class Utilisateur {
     public void setPassword(String password) {
         this.password = password;
     }
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public LocalDate getDateInscription() {
+        return dateInscription;
+    }
+
+    public void setDateInscription(LocalDate dateInscription) {
+        this.dateInscription = dateInscription;
+    }
+
 
     @Override
     public String toString() {
         return "Utilisateur{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", userType=" + userType +
+                ", dateInscription=" + dateInscription +
                 '}';
     }
 }

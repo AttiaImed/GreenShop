@@ -1,11 +1,11 @@
 package esprit.tn.greenshopjavafx.Controllers;
 
-import esprit.tn.greenshopjavafx.Utils.DataSource;
+import esprit.tn.greenshopjavafx.Entities.Utilisateur.UserType;
+import esprit.tn.greenshopjavafx.Entities.Utilisateur.Utilisateur;
+import esprit.tn.greenshopjavafx.Services.UtilisateurService.ServiceUtilisateur;
 import esprit.tn.greenshopjavafx.Entities.data;
 
 import javafx.animation.TranslateTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,12 +21,12 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class FXMLDocumentController implements Initializable {
+public class AuthController implements Initializable {
 
     @FXML
     private AnchorPane si_loginForm;
@@ -53,16 +53,22 @@ public class FXMLDocumentController implements Initializable {
     private PasswordField su_password;
 
     @FXML
-    private ComboBox<?> su_question;
+    private TextField su_email;
 
     @FXML
-    private TextField su_answer;
+    private PasswordField su_Cpassword;
+
+
+
+
 
     @FXML
     private Button su_signupBtn;
 
     @FXML
     private TextField fp_username;
+    @FXML
+    private PasswordField fp_Password;
 
     @FXML
     private AnchorPane fp_questionForm;
@@ -70,11 +76,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button fp_proceedBtn;
 
-    @FXML
-    private ComboBox<?> fp_question;
 
-    @FXML
-    private TextField fp_answer;
 
     @FXML
     private Button fp_back;
@@ -108,7 +110,7 @@ public class FXMLDocumentController implements Initializable {
     private ResultSet result;
 
     private Alert alert;
-
+    ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
     public void loginBtn() {
 
         if (si_username.getText().isEmpty() || si_password.getText().isEmpty()) {
@@ -118,20 +120,10 @@ public class FXMLDocumentController implements Initializable {
             alert.setContentText("Incorrect Username/Password");
             alert.showAndWait();
         } else {
-
-            String selctData = "SELECT username, password FROM employee WHERE username = ? and password = ?";
-
-            connect = DataSource.getInstance().getCon();
-
+             int exist ;
             try {
-
-                prepare = connect.prepareStatement(selctData);
-                prepare.setString(1, si_username.getText());
-                prepare.setString(2, si_password.getText());
-
-                result = prepare.executeQuery();
-                // IF SUCCESSFULLY LOGIN, THEN PROCEED TO ANOTHER FORM WHICH IS OUR MAIN FORM
-                if (result.next()) {
+               exist= serviceUtilisateur.login(si_username.getText(),si_password.getText());
+                if ( exist!=-1) {
                     // TO GET THE USERNAME THAT USER USED
                     data.username = si_username.getText();
 
@@ -163,10 +155,25 @@ public class FXMLDocumentController implements Initializable {
                     alert.setContentText("Incorrect Username/Password");
                     alert.showAndWait();
                 }
-
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+
+           /* String selctData = "SELECT email, password FROM utilisateur WHERE email = ? and password = ?";
+
+            connect = DataSource.getInstance().getCon();
+
+            try {
+
+                prepare = connect.prepareStatement(selctData);
+                prepare.setString(1, si_username.getText());
+                prepare.setString(2, si_password.getText());
+
+                result = prepare.executeQuery();*/
+                // IF SUCCESSFULLY LOGIN, THEN PROCEED TO ANOTHER FORM WHICH IS OUR MAIN FORM
+
+
+
 
         }
 
@@ -176,129 +183,71 @@ public class FXMLDocumentController implements Initializable {
     public void regBtn() {
 
         if (su_username.getText().isEmpty() || su_password.getText().isEmpty()
-                || su_question.getSelectionModel().getSelectedItem() == null
-                || su_answer.getText().isEmpty()) {
+                || su_email.getText().isEmpty()
+                || su_Cpassword.getText().isEmpty()) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
             alert.setContentText("Please fill all blank fields");
             alert.showAndWait();
-        } else {
-
-            String regData = "INSERT INTO employee (username, password, question, answer, date) "
-                    + "VALUES(?,?,?,?,?)";
-            connect = DataSource.getInstance().getCon();
-
+        } else if (su_password.getText().equals(su_Cpassword.getText())){
+            Utilisateur u = new Utilisateur(su_username.getText(),su_email.getText(),su_password.getText(), UserType.CUSTOMER);
             try {
-                // CHECK IF THE USERNAME IS ALREADY RECORDED
-                String checkUsername = "SELECT username FROM employee WHERE username = '"
-                        + su_username.getText() + "'";
 
-                prepare = connect.prepareStatement(checkUsername);
-                result = prepare.executeQuery();
+                serviceUtilisateur.ajouter(u);
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Successfully registered Account!");
+                alert.showAndWait();
 
-                if (result.next()) {
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText(su_username.getText() + " is already taken");
-                    alert.showAndWait();
-                } else if (su_password.getText().length() < 8) {
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Invalid Password, atleast 8 characters are needed");
-                    alert.showAndWait();
-                } else {
-                    prepare = connect.prepareStatement(regData);
-                    prepare.setString(1, su_username.getText());
-                    prepare.setString(2, su_password.getText());
-                    prepare.setString(3, (String) su_question.getSelectionModel().getSelectedItem());
-                    prepare.setString(4, su_answer.getText());
+                su_username.setText("");
+                su_email.setText("");
+                su_password.setText("");
+                su_Cpassword.setText("");
 
-                    Date date = new Date();
-                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-                    prepare.setString(5, String.valueOf(sqlDate));
-                    prepare.executeUpdate();
+                TranslateTransition slider = new TranslateTransition();
 
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Successfully registered Account!");
-                    alert.showAndWait();
+                slider.setNode(side_form);
+                slider.setToX(0);
+                slider.setDuration(Duration.seconds(.5));
 
-                    su_username.setText("");
-                    su_password.setText("");
-                    su_question.getSelectionModel().clearSelection();
-                    su_answer.setText("");
-
-                    TranslateTransition slider = new TranslateTransition();
-
-                    slider.setNode(side_form);
-                    slider.setToX(0);
-                    slider.setDuration(Duration.seconds(.5));
-
-                    slider.setOnFinished((ActionEvent e) -> {
-                        side_alreadyHave.setVisible(false);
-                        side_CreateBtn.setVisible(true);
-                    });
-
-                    slider.play();
+                slider.setOnFinished((ActionEvent e) -> {
+                    side_alreadyHave.setVisible(false);
+                    side_CreateBtn.setVisible(true);
                 }
+                );
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                slider.play();
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
 
     }
 
-    private String[] questionList = {"What is your favorite Color?", "What is your favorite food?", "what is your birth date?"};
-
-    public void regLquestionList() {
-        List<String> listQ = new ArrayList<>();
-
-        for (String data : questionList) {
-            listQ.add(data);
-        }
-
-        ObservableList listData = FXCollections.observableArrayList(listQ);
-        su_question.setItems(listData);
-    }
 
     public void switchForgotPass() {
         fp_questionForm.setVisible(true);
         si_loginForm.setVisible(false);
 
-        forgotPassQuestionList();
     }
 
     public void proceedBtn() {
-
-        if (fp_username.getText().isEmpty() || fp_question.getSelectionModel().getSelectedItem() == null
-                || fp_answer.getText().isEmpty()) {
+        if (fp_username.getText().isEmpty() ||fp_Password.getText().isEmpty())
+           {
 
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
             alert.setContentText("Please fill all blank fields");
             alert.showAndWait();
-
         } else {
-
-            String selectData = "SELECT username, question, answer FROM employee WHERE username = ? AND question = ? AND answer = ?";
-            connect = DataSource.getInstance().getCon();
-
             try {
-
-                prepare = connect.prepareStatement(selectData);
-                prepare.setString(1, fp_username.getText());
-                prepare.setString(2, (String) fp_question.getSelectionModel().getSelectedItem());
-                prepare.setString(3, fp_answer.getText());
-
-                result = prepare.executeQuery();
-
-                if (result.next()) {
+                  id =serviceUtilisateur.login(fp_username.getText(),fp_Password.getText());
+                 Utilisateur u = serviceUtilisateur.get(id);
+                if (u !=null) {
                     np_newPassForm.setVisible(true);
                     fp_questionForm.setVisible(false);
                 } else {
@@ -316,7 +265,7 @@ public class FXMLDocumentController implements Initializable {
         }
 
     }
-
+ int id ;
     public void changePassBtn() {
 
         if (np_newPassword.getText().isEmpty() || np_confirmPassword.getText().isEmpty()) {
@@ -327,32 +276,15 @@ public class FXMLDocumentController implements Initializable {
             alert.showAndWait();
         } else {
 
+
             if (np_newPassword.getText().equals(np_confirmPassword.getText())) {
-                String getDate = "SELECT date FROM employee WHERE username = '"
-                        + fp_username.getText() + "'";
-
-                connect = DataSource.getInstance().getCon();
-
                 try {
 
-                    prepare = connect.prepareStatement(getDate);
-                    result = prepare.executeQuery();
-
-                    String date = "";
-                    if (result.next()) {
-                        date = result.getString("date");
-                    }
-
-                    String updatePass = "UPDATE employee SET password = '"
-                            + np_newPassword.getText() + "', question = '"
-                            + fp_question.getSelectionModel().getSelectedItem() + "', answer = '"
-                            + fp_answer.getText() + "', date = '"
-                            + date + "' WHERE username = '"
-                            + fp_username.getText() + "'";
-
-                    prepare = connect.prepareStatement(updatePass);
-                    prepare.executeUpdate();
-
+                   Utilisateur user= serviceUtilisateur.get(id);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String currentDate = dateFormat.format(new Date());
+                    user.setPassword(np_newPassword.getText());
+                    serviceUtilisateur.update(user);
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
@@ -365,8 +297,6 @@ public class FXMLDocumentController implements Initializable {
                     // TO CLEAR FIELDS
                     np_confirmPassword.setText("");
                     np_newPassword.setText("");
-                    fp_question.getSelectionModel().clearSelection();
-                    fp_answer.setText("");
                     fp_username.setText("");
 
                 } catch (Exception e) {
@@ -382,18 +312,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    public void forgotPassQuestionList() {
 
-        List<String> listQ = new ArrayList<>();
-
-        for (String data : questionList) {
-            listQ.add(data);
-        }
-
-        ObservableList listData = FXCollections.observableArrayList(listQ);
-        fp_question.setItems(listData);
-
-    }
 
     public void backToLoginForm(){
         si_loginForm.setVisible(true);
@@ -422,7 +341,6 @@ public class FXMLDocumentController implements Initializable {
                 si_loginForm.setVisible(true);
                 np_newPassForm.setVisible(false);
 
-                regLquestionList();
             });
 
             slider.play();
