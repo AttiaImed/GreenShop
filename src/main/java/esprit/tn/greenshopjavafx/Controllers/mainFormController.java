@@ -1,5 +1,6 @@
 package esprit.tn.greenshopjavafx.Controllers;
 import esprit.tn.greenshopjavafx.Entities.Fournisseur.Fournisseur;
+import esprit.tn.greenshopjavafx.Entities.GestionStock.Stock;
 import esprit.tn.greenshopjavafx.Entities.Panier.Commande;
 import esprit.tn.greenshopjavafx.Entities.Panier.PanierProduit;
 import esprit.tn.greenshopjavafx.Entities.Produit.Marque;
@@ -9,6 +10,7 @@ import esprit.tn.greenshopjavafx.Services.FournisseurService.FournisseurService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.MarqueService;
 import esprit.tn.greenshopjavafx.Services.ProduitService.ProduitService;
 
+import esprit.tn.greenshopjavafx.Services.StockService.ServiceStock;
 import esprit.tn.greenshopjavafx.Services.UtilisateurService.ServiceUtilisateur;
 import esprit.tn.greenshopjavafx.Services.panierService.CommandeService;
 import esprit.tn.greenshopjavafx.Utils.DataSource;
@@ -44,6 +46,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import javafx.util.StringConverter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -1149,7 +1152,271 @@ public class mainFormController implements Initializable {
     //End Fournisseur
 
 
+    //Stock///////////////////Omaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Stock///////////////////Omaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Stock////////////////////////////////////////Omarrrrrrrrrrrrrrrrrrrrrrrrrrrrr//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    @FXML
+    private TableView<Stock> stock_tableView;
+    @FXML
+    private TableColumn<Stock, Integer> stock_col_id;
+    @FXML
+    private TableColumn<Stock, String> stock_col_nom;
+    @FXML
+    private TableColumn<Stock, String> stock_col_marque;
+    @FXML
+    private TableColumn<Stock, String> stock_col_categorie;
+
+
+    @FXML
+    private TableColumn<Stock, Double> stock_col_prix;
+    @FXML
+    private TableColumn<Stock, Integer> stock_col_quantite;
+
+    @FXML
+    private TableColumn<Stock, Integer> stock_col_note;
+    @FXML
+    private TableColumn<Stock, Integer> stock_col_produit_id;
+
+    @FXML
+    Button addButtonStock;
+    @FXML
+    private ComboBox<Produit> produitComboBox;
+
+
+    private ServiceStock serviceStock = new ServiceStock();
+    private ProduitService serviceProduit = new ProduitService();
+
+    @FXML
+    private TextField quantiteTextField;
+
+    @FXML
+    private TextField nomTextField2, marqueTextField, categorieTextField, prixTextField, noteTextField, produitIdTextField;
+
+    private void refreshTableViewOmar() {
+        try {
+            ArrayList<Stock> stocks = serviceStock.readAll();
+            ObservableList<Stock> data = FXCollections.observableArrayList(stocks);
+            stock_tableView.setItems(data); // Met à jour les données dans la TableView
+            stock_tableView.refresh(); // Actualise la TableView
+
+            // Debug statement to print the size of the TableView items
+            System.out.println("Number of items in TableView: " + stock_tableView.getItems().size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void setupProduitComboBox() throws SQLException {
+        List<Produit> produits = serviceProduit.readAll();
+
+        // Utilisez un mapper pour afficher uniquement le nom du produit dans la ComboBox
+        produitComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Produit produit) {
+                return produit != null ? produit.getNom() : "";
+            }
+
+            @Override
+            public Produit fromString(String string) {
+                // Conversion non nécessaire pour une ComboBox non-éditable
+                return null;
+            }
+        });
+
+        produitComboBox.getItems().setAll(produits);
+
+        // Mettez à jour les champs marque et prix lorsque le produit sélectionné change
+        produitComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // newValue est maintenant le Produit sélectionné
+                prixTextField.setText(String.valueOf(newValue.getPrix()));
+            }
+        });
+    }
+
+
+
+    private void setupAddButtonStock() {
+        addButtonStock.setOnAction(e -> {
+            addStockFromInputFields();
+            refreshTableViewOmar(); // Rafraîchir la TableView après l'ajout
+        });
+    }
+
+    private boolean isValidInputOmar() {
+        // Vérifie si les champs sont remplis correctement avant l'ajout
+        return produitComboBox.getValue() != null
+                && !quantiteTextField.getText().isEmpty()
+                && !categorieTextField.getText().isEmpty();
+    }
+
+    private void resetInputFields() {
+        produitComboBox.getSelectionModel().clearSelection();
+        categorieTextField.clear();
+        quantiteTextField.clear();
+    }
+
+
+    private void addStockFromInputFields() {
+        if (!isValidInputOmar()) {
+            // Affichage d'une alerte JavaFX pour indiquer que tous les champs doivent être remplis
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Champs manquants");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez remplir tous les champs.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            // Créer un nouvel objet Stock avec les données de l'interface utilisateur
+            Stock newStock = new Stock();
+
+            // Obtenez le produit sélectionné à partir de la ComboBox
+            Produit produit = produitComboBox.getSelectionModel().getSelectedItem();
+            newStock.setNom(produit.getNom()); // Le nom est défini automatiquement
+            newStock.setMarque(produit.getMarque().getNom()); // La marque est définie automatiquement
+            newStock.setPrix(produit.getPrix()); // Le prix est défini automatiquement
+            newStock.setIdProduit(produit.getId());
+
+            newStock.setCategorie(categorieTextField.getText()); // La catégorie est entrée manuellement
+            newStock.setQuantite(Integer.parseInt(quantiteTextField.getText())); // La quantité est entrée manuellement
+
+            serviceStock.ajouter(newStock);
+
+            // Mettez à jour la TableView pour afficher le nouveau stock
+            refreshTableViewOmar();
+            // Réinitialiser les champs après l'ajout
+            resetInputFields();
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
+            // Gérer l'exception (par exemple, afficher un message d'erreur)
+        }
+    }
+
+
+    @FXML
+    private void deleteStock(ActionEvent event) {
+        Stock selectedStock = stock_tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedStock == null) {
+            // Affichage d'une alerte JavaFX pour indiquer qu'un stock doit être sélectionné
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucun stock sélectionné");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner un stock à supprimer.");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation de suppression");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Voulez-vous vraiment supprimer ce stock ?");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                serviceStock.delete(selectedStock.getId());
+                refreshTableViewOmar(); // Rafraîchir la TableView après la suppression
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void modifyStock() {
+        Stock selectedStock = stock_tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedStock == null) {
+            // Affichage d'une alerte JavaFX pour indiquer qu'un stock doit être sélectionné
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucun stock sélectionné");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner un stock à modifier.");
+            alert.showAndWait();
+            return;
+        }
+
+        String newCategorie = categorieTextField.getText();
+        String newQuantityText = quantiteTextField.getText();
+
+        if (!newCategorie.isEmpty()) {
+            selectedStock.setCategorie(newCategorie);
+        }
+
+        if (!newQuantityText.isEmpty()) {
+            try {
+                int newQuantity = Integer.parseInt(newQuantityText);
+                selectedStock.setQuantite(newQuantity);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                // Gérer l'exception (par exemple, afficher un message d'erreur)
+            }
+        }
+
+        try {
+            // Appelez la méthode update de votre service pour mettre à jour la catégorie et la quantité du stock
+            serviceStock.update(selectedStock);
+            refreshTableViewOmar(); // Rafraîchir la TableView après la mise à jour
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gérer l'exception (par exemple, afficher un message d'erreur)
+        }
+    }
+
+    @FXML
+    private TextField rechercheMarqueTextField;
+
+
+
+
+    // Créez une variable pour stocker les données d'origine
+    private ObservableList<Stock> originalStockData;
+
+
+    // Modifiez votre méthode de recherche
+    @FXML
+    private void rechercheParMarque() {
+        String marque = rechercheMarqueTextField.getText();
+
+        try {
+            ServiceStock serviceStock = new ServiceStock();
+            ArrayList<Stock> stocksTrouves = serviceStock.chercherProduitParMarque(marque);
+
+            stock_tableView.getItems().clear(); // Efface le contenu actuel
+            stock_tableView.getItems().addAll(stocksTrouves); // Affiche les résultats de la recherche
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gérer l'exception (par exemple, afficher un message d'erreur)
+        }
+    }
+
+    // Ajoutez une méthode pour restaurer les données d'origine
+    private void restoreOriginalStockData() {
+        stock_tableView.getItems().clear();
+        stock_tableView.getItems().addAll(originalStockData);
+    }
+
+
+
+
+    @FXML
+    private void refreshButtonClicked() {
+        restoreOriginalStockData(); // Appel à la méthode pour restaurer les données d'origine
+    }
+
+
+
+
+
+
+    //Stock///////////////////Omaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Stock///////////////////Omaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Stock///////////////////Omaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     public void switchForm(ActionEvent event) {
@@ -1190,9 +1457,9 @@ public class mainFormController implements Initializable {
             dashboard_form.setVisible(false);
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
-
             stock_form.setVisible(true);
             fournisseurs_form.setVisible(false);
+            refreshTableViewOmar();
 
         }
         else if (event.getSource() == fournisseur_btn) {
@@ -1281,6 +1548,40 @@ public class mainFormController implements Initializable {
         configureTableViewColumns();
         refreshTableView();
         searchButton.setOnAction(e -> handleRechercherFournisseur(null));
-    }
 
+
+        /////omarrrrr/////////////////////////////////
+
+        setupAddButtonStock();
+        try {
+            setupProduitComboBox();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        /////////////// Stock form /////////////////////////////////////////////////
+        stock_col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        stock_col_nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        stock_col_marque.setCellValueFactory(new PropertyValueFactory<>("marque"));
+        stock_col_categorie.setCellValueFactory(new PropertyValueFactory<>("categorie"));
+        stock_col_prix.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        stock_col_produit_id.setCellValueFactory(new PropertyValueFactory<>("idProduit"));
+        stock_col_quantite.setCellValueFactory(new PropertyValueFactory<>("quantite"));
+        /////////////// Stock form /////////////////////////////////////////////////
+
+
+
+        refreshTableViewOmar();
+        originalStockData = FXCollections.observableArrayList();
+        originalStockData.addAll(stock_tableView.getItems());
+        stock_tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Récupérez le stock sélectionné
+                Stock selectedStock = stock_tableView.getSelectionModel().getSelectedItem();
+
+                // Mettez à jour les champs du formulaire avec les informations du stock sélectionné
+                categorieTextField.setText(selectedStock.getCategorie());
+                quantiteTextField.setText(String.valueOf(selectedStock.getQuantite()));
+            }
+        });
+    }
 }
