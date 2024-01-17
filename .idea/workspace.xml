@@ -5,11 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1901599b-9450-451e-b5da-2c9fe00adf8a" name="Changes" comment="Fussion du travail">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a131c1da-5db2-4884-835a-42966e0fd309.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/cardProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/cardProductController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Panier/Commande.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Panier/Commande.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Panier/PanierProduit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Panier/PanierProduit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/CommandeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/CommandeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/PanierProduitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/panierService/PanierProduitService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/mainForm.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/esprit/tn/greenshopjavafx/mainForm.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,16 +66,17 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/imeda/IdeaProjects/GreenShopJavaFx/src/main/java/esprit/tn/greenshopjavafx/Services&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jihed/Downloads/GreenShop&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -98,7 +105,7 @@
   <component name="RunManager">
     <configuration name="TestProduit" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="esprit.tn.greenshopjavafx.Test.TestProduit" />
-      <module name="GreenShopJavaFx" />
+      <module name="GreenShop" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="esprit.tn.greenshopjavafx.Test.*" />
@@ -147,6 +154,12 @@
       <workItem from="1703760189644" duration="9943000" />
       <workItem from="1703789478126" duration="3306000" />
       <workItem from="1703804609117" duration="3697000" />
+      <workItem from="1705172435339" duration="334000" />
+      <workItem from="1705172919336" duration="4453000" />
+      <workItem from="1705268119179" duration="124000" />
+      <workItem from="1705522113737" duration="855000" />
+      <workItem from="1705523572866" duration="1189000" />
+      <workItem from="1705524840240" duration="976000" />
     </task>
     <task id="LOCAL-00001" summary="base de donne">
       <option name="closed" value="true" />
@@ -195,16 +208,5 @@
     <MESSAGE value="ajouter stock" />
     <MESSAGE value="Fussion du travail" />
     <option name="LAST_COMMIT_MESSAGE" value="Fussion du travail" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/mainFormController.java</url>
-          <line>578</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

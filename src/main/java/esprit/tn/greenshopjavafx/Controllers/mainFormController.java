@@ -746,8 +746,8 @@ public class mainFormController implements Initializable {
             }
         }
     }
+
     public void menuShowOrderData() {
-        customerID();
         ObservableList<Produit> listData = FXCollections.observableArrayList();
         listData.addAll(PanierProduit.getProductListProperty());
 
@@ -755,6 +755,7 @@ public class mainFormController implements Initializable {
         menu_col_productName.setCellValueFactory(new PropertyValueFactory<>("nom"));
         menu_col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         menu_col_price.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        System.out.println("/////////////////////");
         // Set the items directly to the TableView
         menu_tableView.setItems(listData);
         menu_tableView.refresh();
@@ -774,7 +775,44 @@ public class mainFormController implements Initializable {
         getid = prod.getId();
 
     }
+    public ObservableList<Produit> menuGetOrder() {
+        customerID();
+        ObservableList<Produit> listData = FXCollections.observableArrayList();
 
+//        String sql = "SELECT * FROM panierprod WHERE customer_id = " + cID;
+//
+//        connect = DataSource.getInstance().getCon();
+//
+//        try {
+//
+//            prepare = connect.prepareStatement(sql);
+//            result = prepare.executeQuery();
+//
+//            productData prod;
+//
+//            while (result.next()) {
+//                prod = new productData(result.getInt("id"),
+//                        result.getString("prod_id"),
+//                        result.getString("prod_name"),
+//                        result.getString("type"),
+//                        result.getInt("quantity"),
+//                        result.getDouble("prix"),
+//                        result.getString("image"),
+//                        result.getDate("date"));
+//                listData.add(prod);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return listData;
+        for (Produit pq : PanierProduit.getProductListProperty()){
+
+            listData.add(pq);
+        }
+        return listData;
+    }
     private double totalP;
     public void menuGetTotal() {
         customerID();
@@ -782,7 +820,7 @@ public class mainFormController implements Initializable {
     }
 
     public void menuDisplayTotal() {
-        totalP = PanierProduit.calculateTotalPrice();
+        menuGetTotal();
         menu_total.setText("$" + PanierProduit.calculateTotalPrice());
     }
 
@@ -790,6 +828,7 @@ public class mainFormController implements Initializable {
     private double change;
 
     public void menuAmount() {
+        menuGetTotal();
         if (menu_amount.getText().isEmpty() || totalP == 0) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
@@ -807,64 +846,81 @@ public class mainFormController implements Initializable {
         }
     }
 
-    public void menuPayBtn() {
 
+    public void menuPayBtn() throws SQLException {
         if (PanierProduit.calculateTotalPrice() == 0) {
-            alert = new Alert(AlertType.ERROR);
+            // Display an error alert if no order is chosen
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
             alert.setContentText("Please choose your order first!");
             alert.showAndWait();
         } else {
-            menuGetTotal();
+//        // Get customer information
+//        TextInputDialog nameDialog = new TextInputDialog();
+//        nameDialog.setTitle("Customer Information");
+//        nameDialog.setHeaderText("Please enter your information:");
+//        nameDialog.setContentText("Name:");
+//        Optional<String> nameResult = nameDialog.showAndWait();
+//
+//        if (nameResult.isPresent()) {
+//            String name = nameResult.get();
+//
+//            TextInputDialog surnameDialog = new TextInputDialog();
+//            surnameDialog.setTitle("Customer Information");
+//            surnameDialog.setHeaderText("Please enter your information:");
+//            surnameDialog.setContentText("Surname:");
+//            Optional<String> surnameResult = surnameDialog.showAndWait();
+//
+//            if (surnameResult.isPresent()) {
+//                String surname = surnameResult.get();
 
-            try {
-                if (false) {
-                    alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error Messaged");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Something wrong :3");
-                    alert.showAndWait();
-                } else {
-                    alert = new Alert(AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmation Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Are you sure?");
-                    Optional<ButtonType> option = alert.showAndWait();
+            TextInputDialog addressDialog = new TextInputDialog();
+            addressDialog.setTitle("Customer Information");
+            addressDialog.setHeaderText("Please enter your information:");
+            addressDialog.setContentText("Address:");
+            Optional<String> addressResult = addressDialog.showAndWait();
 
-                    if (option.get().equals(ButtonType.OK)) {
-                        customerID();
-                        menuGetTotal();
-                        Date date = new Date();
-                        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-                        Commande c  = new Commande( totalP, Integer.parseInt(String.valueOf(cID)),String.valueOf(sqlDate));
-                        commandeService.ajouter(c);
+            if (addressResult.isPresent()) {
+                String address = addressResult.get();
 
-                        alert = new Alert(AlertType.INFORMATION);
-                        alert.setTitle("Infomation Message");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Successful.");
-                        alert.showAndWait();
 
-                        menuShowOrderData();
+                // Rest of your existing code
+                // ...
 
-                    } else {
-                        alert = new Alert(AlertType.WARNING);
-                        alert.setTitle("Infomation Message");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Cancelled.");
-                        alert.showAndWait();
-                    }
-                }
+                // Now you can use the 'name', 'surname', and 'address' variables as needed.
+                // For example, you can include them in your SQL query or any other relevant part of your code.
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                // Replace the following comments with your existing code logic
+                customerID();
+                menuGetTotal();
+                Date date = new Date();
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+                Commande c = new Commande(totalP, Integer.parseInt(String.valueOf(cID)), String.valueOf(sqlDate),address);
+                commandeService.ajouter(c);
+
+                alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Information Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Successful.\n payment will be on delivery of the product");
+                alert.showAndWait();
+                PanierProduit.viderListeProduits();
+                menuShowOrderData();
             }
+//            } else {
+//                // User canceled entering the surname
+//                // Show a warning or handle it as needed
+//            }
+//        } else {
+//            // User canceled entering the name
+//            // Show a warning or handle it as needed
+//        }
         }
-
     }
 
     public void menuRemoveBtn() {
+
         if (getid == 0) {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
@@ -872,6 +928,8 @@ public class mainFormController implements Initializable {
             alert.setContentText("Please select the order you want to remove");
             alert.showAndWait();
         } else {
+//            String deleteData = "DELETE FROM panierprod WHERE id = " + getid;
+//            connect = DataSource.getInstance().getCon();
             try {
                 alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Message");
@@ -891,51 +949,50 @@ public class mainFormController implements Initializable {
 
         }
     }
-
-    public void menuReceiptBtn() {
-
-        if (PanierProduit.calculateTotalPrice() == 0 ) {
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error Message");
-            alert.setContentText("Please order first");
-            alert.showAndWait();
-        } else {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("getReceipt", (cID - 1));
-            connect = DataSource.getInstance().getCon();
-            try {
-
-                // Load the JRXML file from the resources folder
-                InputStream inputStream = getClass().getResourceAsStream("/esprit/tn/greenshopjavafx/report.jrxml");
-                JasperDesign jDesign = JRXmlLoader.load(inputStream);
-
-                // Compile the JRXML file into a JasperReport object
-                JasperReport jReport = JasperCompileManager.compileReport(jDesign);
-
-                // Fill the JasperReport with data and obtain a JasperPrint object
-                JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
-
-                // Display the JasperPrint in a JasperViewer
-                JasperViewer.viewReport(jPrint, false);
-
-                // Restart the menu (possibly clearing the shopping cart)
-                menuRestart();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
+//    public void menuReceiptBtn() {
+//
+//        if (PanierProduit.calculateTotalPrice() == 0 ) {
+//            alert = new Alert(AlertType.ERROR);
+//            alert.setTitle("Error Message");
+//            alert.setContentText("Please order first");
+//            alert.showAndWait();
+//        } else {
+//            HashMap<String, Object> map = new HashMap<>();
+//            map.put("getReceipt", (cID - 1));
+//            connect = DataSource.getInstance().getCon();
+//            try {
+//
+//                // Load the JRXML file from the resources folder
+//                InputStream inputStream = getClass().getResourceAsStream("/esprit/tn/greenshopjavafx/report.jrxml");
+//                JasperDesign jDesign = JRXmlLoader.load(inputStream);
+//
+//                // Compile the JRXML file into a JasperReport object
+//                JasperReport jReport = JasperCompileManager.compileReport(jDesign);
+//
+//                // Fill the JasperReport with data and obtain a JasperPrint object
+//                JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
+//
+//                // Display the JasperPrint in a JasperViewer
+//                JasperViewer.viewReport(jPrint, false);
+//
+//                // Restart the menu (possibly clearing the shopping cart)
+//                menuRestart();
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//
+//    }
 
     public void menuRestart() {
         totalP = 0;
         change = 0;
         amount = 0;
         menu_total.setText("$0.0");
-        menu_amount.setText("");
-        menu_change.setText("$0.0");
+
+
     }
 
     private int cID;

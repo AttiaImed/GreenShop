@@ -55,5 +55,7 @@ public class PanierProduit {
         return total;
     }
 
-
+    public static void viderListeProduits() {
+        productListProperty.getValue().clear();
+    }
 }
