@@ -4,10 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Commande {
-        private int id;
-        private double montant;
-        private int customer_id;
-        private String date;
+    private int id;
+    private double montant;
+    private int customer_id;
+    private String date;
+    private String address;
 
     public Commande(int id, double montant, int customer_id) {
         this.id = id;
@@ -23,6 +24,40 @@ public class Commande {
         this.montant = montant;
         this.customer_id = customer_id;
         this.date = date;
+    }
+
+    public Commande(double montant, int customer_id, String date, String address) {
+        this.montant = montant;
+        this.customer_id = customer_id;
+        this.date = date;
+        this.address= address;
+    }
+
+    public Commande(int id, double montant, int customer_id, String date, String address) {
+        this.id=id;
+        this.montant = montant;
+        this.customer_id = customer_id;
+        this.date = date;
+        this.address= address;
+    }
+
+    @Override
+    public String toString() {
+        return "Commande{" +
+                "id=" + id +
+                ", montant=" + montant +
+                ", customer_id=" + customer_id +
+                ", date='" + date + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getId() {

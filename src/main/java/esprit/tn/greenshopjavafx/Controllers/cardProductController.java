@@ -11,12 +11,8 @@ import esprit.tn.greenshopjavafx.Entities.Produit.Produit;
 import esprit.tn.greenshopjavafx.Services.ProduitService.ProduitService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +20,8 @@ import javafx.scene.layout.AnchorPane;
 
 
 public class cardProductController   implements Initializable {
+    @FXML
+    private TableView<Produit> menu_tableView;
 
     @FXML
     private AnchorPane card_form;
@@ -76,6 +74,9 @@ public class cardProductController   implements Initializable {
         }else {
             System.out.println("image noy found ");
         }
+//        String path = "File:" + prodData.getImage();
+//        image = new Image(path, 190, 94, false, true);
+//        prod_imageView.setImage(image);
         pr = prodData.getPrix();
 
     }
@@ -91,6 +92,8 @@ public class cardProductController   implements Initializable {
     ProduitService produitService = new ProduitService();
 
     public void addBtn() {
+
+
         Produit P ;
 
         try {
@@ -103,7 +106,7 @@ public class cardProductController   implements Initializable {
             alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
-            alert.setContentText("Something Wrong :3");
+            alert.setContentText("The quantity is 0");
             alert.showAndWait();
         } else {
 
@@ -115,14 +118,17 @@ public class cardProductController   implements Initializable {
                 alert.showAndWait();
             } else
             {
+
                 System.out.println(prodID);
                 PanierProduit.addProduct(P,qty, Integer.parseInt(prodID));
+                menu_tableView.refresh();
                 System.out.println(PanierProduit.getProductListProperty());
             }
 
         }
 
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
