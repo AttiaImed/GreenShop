@@ -149,6 +149,49 @@ INSERT INTO `marque` (`id`, `nom`) VALUES
 
 -- --------------------------------------------------------
 
+-- Structure de la table `stock`
+--
+
+CREATE TABLE `stock` (
+                         `id` int(11) NOT NULL,
+                         `nom` varchar(255) DEFAULT NULL,
+                         `marque` varchar(255) DEFAULT NULL,
+                         `categorie` varchar(255) DEFAULT NULL,
+                         `prix` decimal(10,2) DEFAULT NULL,
+                         `produit_id` int(11) DEFAULT NULL,
+                         `quantite` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `stock`
+--
+
+INSERT INTO `stock` (`id`, `nom`, `marque`, `categorie`, `prix`, `produit_id`, `quantite`) VALUES
+                                                                                               (19, 'Orange', 'Sony ', 'tt', 699.00, 9, 222222),
+                                                                                               (20, 'Updated TV', 'Service', 'omarrr', 699.00, 5, 40),
+                                                                                               (22, 'Orange', 'Sony ', 'cat', 699.00, 9, 50);
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `stock`
+--
+ALTER TABLE `stock`
+    ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `stock`
+--
+ALTER TABLE `stock`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+COMMIT;
+
 --
 -- Structure de la table `panier_id_produit_id`
 --
