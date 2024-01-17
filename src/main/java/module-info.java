@@ -13,6 +13,8 @@ module esprit.tn.greenshopjavafx {
     opens esprit.tn.greenshopjavafx.Entities.Fournisseur to javafx.base;
     opens esprit.tn.greenshopjavafx.Entities.Panier to javafx.base;
     opens esprit.tn.greenshopjavafx.Entities.Utilisateur to javafx.base;
+    opens esprit.tn.greenshopjavafx.Entities.GestionStock to javafx.base;
+
 
 
     exports esprit.tn.greenshopjavafx;
