@@ -255,18 +255,19 @@
                                     <HBox spacing="10">
                                        <ComboBox fx:id="produitComboBox" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px;" />
                                        <TextField fx:id="quantiteTextField" promptText="Quantité" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px;" />
-                                       <TextField fx:id="categorieTextField" promptText="Catégorie" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px;" />
+                                       <ComboBox fx:id="categorieComboBox" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px;" />
                                        <Button fx:id="modifyButtonStock" text="Modifier" onAction="#modifyStock" style="-fx-background-color: #007bff; -fx-text-fill: #ffffff; -fx-border-radius: 5px; -fx-background-radius: 5px;" />
                                        <Button fx:id="addButtonStock" text="Ajouter" style="-fx-background-color: #4CAF50; -fx-text-fill: #ffffff; -fx-border-radius: 5px; -fx-background-radius: 5px;" />
                                        <Button fx:id="deleteButtonStock" text="Supprimer" onAction="#deleteStock" style="-fx-background-color: #ad0006; -fx-text-fill: #ffffff; -fx-border-radius: 5px; -fx-background-radius: 5px;"/>
                                     </HBox>
-                                    <Label text="Rechercher par Marque" style="-fx-font-size: 16px; -fx-text-fill: #333333;" />
+                                    <Label text="Rechercher par Marque et Catégorie" style="-fx-font-size: 16px; -fx-text-fill: #333333;" />
                                     <HBox spacing="10">
                                        <TextField fx:id="rechercheMarqueTextField" promptText="Marque à rechercher" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px;" />
-                                       <Button fx:id="rechercheParMarqueButton" text="Rechercher" onAction="#rechercheParMarque" style="-fx-background-color: #007bff; -fx-text-fill: #ffffff; -fx-border-radius: 5px; -fx-background-radius: 5px;" />
+                                       <ComboBox fx:id="categorieComboBoxSearch" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px;" />
+                                       <Button fx:id="rechercheParMarqueEtCategorieButton" text="Rechercher" onAction="#rechercheParMarqueEtCategorie" style="-fx-background-color: #007bff; -fx-text-fill: #ffffff; -fx-border-radius: 5px; -fx-background-radius: 5px;" />
                                        <Button fx:id="refreshButton" text="Refresh" onAction="#refreshButtonClicked" />
-
                                     </HBox>
+
                                  </VBox>
                               </AnchorPane>
                            </children>

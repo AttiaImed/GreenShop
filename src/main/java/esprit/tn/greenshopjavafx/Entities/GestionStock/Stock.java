@@ -7,7 +7,7 @@ public class Stock {
     int quantite;
     double prix;
     String marque;
-    String categorie;
+    categorie categorie;
 
 
     public int getId() {
@@ -57,12 +57,11 @@ public class Stock {
     public void setMarque(String marque) {
         this.marque = marque;
     }
-
-    public String getCategorie() {
+    public categorie getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(String categorie) {
+    public void setCategorie(categorie categorie) {
         this.categorie = categorie;
     }
 
@@ -75,11 +74,12 @@ public class Stock {
                 ", quantite=" + quantite +
                 ", prix=" + prix +
                 ", marque='" + marque + '\'' +
-                ", categorie='" + categorie + '\'' +
+                ", categorie=" + categorie +
                 '}';
     }
 
-    public Stock(int id, String nom, int idProduit, int quantite, double prix, String marque, String categorie) {
+
+    public Stock(int id, String nom, int idProduit, int quantite, double prix, String marque, categorie categorie) {
         this.id = id;
         this.nom = nom;
         this.idProduit = idProduit;
