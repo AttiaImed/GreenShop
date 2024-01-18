@@ -24,7 +24,7 @@ public class ProduitService implements IService<Produit> {
 
     @Override
     public void ajouter(Produit produit) throws SQLException {
-        String req = "INSERT INTO produit (nom, prix,stock,image,status,quantity, marque,) VALUES (?, ?, ?, ?)";
+        String req = "INSERT INTO produit (nom, prix,stock,image,status,quantity, marque) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = con.prepareStatement(req, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, produit.getNom());
             preparedStatement.setDouble(2, produit.getPrix());

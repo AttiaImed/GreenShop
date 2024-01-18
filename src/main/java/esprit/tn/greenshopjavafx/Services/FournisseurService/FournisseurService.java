@@ -25,8 +25,8 @@ public class FournisseurService implements IService<Fournisseur> {
     }
     @Override
     public  void ajouter(Fournisseur fournisseur) throws SQLException {
-        String query = "INSERT INTO fournisseur (nom, prenom, email,idProduit, adresse, phonenumber) VALUES ('"
-                + fournisseur.getNom() + "', '" + fournisseur.getPrenom() + "', '" + fournisseur.getEmail()+ fournisseur.getProduit().getId() + "', idProduit = '"
+        String query = "INSERT INTO fournisseur (nom, prenom, email, adresse, phonenumber) VALUES ('"
+                + fournisseur.getNom() + "', '" + fournisseur.getPrenom() + "', '" + fournisseur.getEmail()
                 + "', '" + fournisseur.getAdresse() + "', '" + fournisseur.getPhonenumber() + "')";
         int res = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -45,7 +45,6 @@ public class FournisseurService implements IService<Fournisseur> {
         String req = "UPDATE fournisseur SET " +
                 "nom = '" + fournisseur.getNom() + "', " +
                 "prenom = '" + fournisseur.getPrenom() + "', " +
-                "idProduit = '" + fournisseur.getProduit().getId() + "', " +
                 "email = '" + fournisseur.getEmail() + "', " +
                 "adresse = '" + fournisseur.getAdresse() + "', " +
                 "phonenumber = '" + fournisseur.getPhonenumber() + "' " +
@@ -71,10 +70,8 @@ public class FournisseurService implements IService<Fournisseur> {
                 String email = resultSet.getString(4);
                 String adresse = resultSet.getString(5);
                 int phonenumber = resultSet.getInt(6);
-                int idProduit = resultSet.getInt(7);
-                Produit p= produitService.get(idProduit);
 
-                fournisseurs.add(new Fournisseur(id, nom, prenom, email, adresse,phonenumber,p));
+                fournisseurs.add(new Fournisseur(id, nom, prenom, email, adresse,phonenumber));
             }
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -99,11 +96,8 @@ public class FournisseurService implements IService<Fournisseur> {
                     String email = resultSet.getString(4);
                     String adresse = resultSet.getString(5);
                     int phonenumber = resultSet.getInt(6);
-                    int idProduit = resultSet.getInt(7);
-                    Produit p= produitService.get(idProduit);
 
-
-                    Fournisseur fournisseur = new Fournisseur(id, nom, prenom, email, adresse, phonenumber,p);
+                    Fournisseur fournisseur = new Fournisseur(id, nom, prenom, email, adresse, phonenumber);
                     fournisseurs.add(fournisseur);
                 }
             }
@@ -125,12 +119,10 @@ public class FournisseurService implements IService<Fournisseur> {
             String email = resultSet.getString(4);
             String adresse = resultSet.getString(5);
             int phonenumber = resultSet.getInt(6);
-            int idProduit = resultSet.getInt(7);
-            Produit p= produitService.get(idProduit);
 
 
 
-            Fournisseur fournisseur = new Fournisseur(id, nom, prenom, email, adresse, phonenumber,p);
+            Fournisseur fournisseur = new Fournisseur(id, nom, prenom, email, adresse, phonenumber);
             return fournisseur;
         } else {
             return null;

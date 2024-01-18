@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1901599b-9450-451e-b5da-2c9fe00adf8a" name="Changes" comment="change to stock CRUD" />
+    <list default="true" id="1901599b-9450-451e-b5da-2c9fe00adf8a" name="Changes" comment="omar commit">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/esprit.sql" beforeDir="false" afterPath="$PROJECT_DIR$/esprit.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Controllers/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Fournisseur/Fournisseur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Entities/Fournisseur/Fournisseur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/FournisseurService/FournisseurService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/FournisseurService/FournisseurService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/esprit/tn/greenshopjavafx/Services/ProduitService/ProduitService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,7 +23,6 @@
       <list>
         <option value="HTML File" />
         <option value="Class" />
-        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -35,7 +42,6 @@
     </excluded-from-favorite>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -76,13 +82,13 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/oouer/Downloads/mysql-connector-java-8.0.25.jar&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/imeda/IdeaProjects/GreenShopJavaFx/src/main/java/esprit/tn/greenshopjavafx/Services&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -160,8 +166,7 @@
       <workItem from="1703760189644" duration="9943000" />
       <workItem from="1703789478126" duration="3306000" />
       <workItem from="1703804609117" duration="3697000" />
-      <workItem from="1705529000084" duration="368000" />
-      <workItem from="1705610468307" duration="7933000" />
+      <workItem from="1705529200740" duration="121000" />
     </task>
     <task id="LOCAL-00001" summary="base de donne">
       <option name="closed" value="true" />
@@ -187,13 +192,13 @@
       <option name="project" value="LOCAL" />
       <updated>1703808339978</updated>
     </task>
-    <task id="LOCAL-00004" summary="change to stock CRUD">
+    <task id="LOCAL-00004" summary="omar commit">
       <option name="closed" value="true" />
-      <created>1705618312913</created>
+      <created>1705528856733</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1705618312913</updated>
+      <updated>1705528856733</updated>
     </task>
     <option name="localTasksCounter" value="5" />
     <servers />
@@ -218,8 +223,8 @@
     <MESSAGE value="ajouter stock" />
     <MESSAGE value="Fussion du travail" />
     <MESSAGE value="omar last commit" />
-    <MESSAGE value="change to stock CRUD" />
-    <option name="LAST_COMMIT_MESSAGE" value="change to stock CRUD" />
+    <MESSAGE value="omar commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="omar commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

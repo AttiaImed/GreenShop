@@ -12,28 +12,17 @@ public class Fournisseur extends ArrayList<Fournisseur> {
     String adresse;
     int phonenumber;
 
-    Produit produit;
 
     public Fournisseur(){}
 
-    public Fournisseur(int id,String nom,String prenom,String email,String adresse,int phonenumber, Produit produit){
+    public Fournisseur(int id,String nom,String prenom,String email,String adresse,int phonenumber){
         this.id=id;
         this.nom=nom;
         this.prenom=prenom;
         this.email=email;
         this.adresse=adresse;
         this.phonenumber=phonenumber;
-        this.produit=produit;
     }
-
-    public Produit getProduit() {
-        return produit;
-    }
-
-    public void setProduit(Produit produit) {
-        this.produit = produit;
-    }
-
     public int getPhonenumber() {
         return phonenumber;
     }
@@ -91,7 +80,6 @@ public class Fournisseur extends ArrayList<Fournisseur> {
                 ", email='" + email + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", phonenumber=" + phonenumber +
-                ", produit=" + produit +
                 '}';
     }
 }

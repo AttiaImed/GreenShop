@@ -140,7 +140,7 @@ public class AuthController implements Initializable {
                     Scene scene = new Scene(root);
 
                     stage.setTitle("Cafe Shop Management System");
-                    stage.setMinWidth(1100);
+                    stage.setMinWidth(1500);
                     stage.setMinHeight(600);
 
                     stage.setScene(scene);
