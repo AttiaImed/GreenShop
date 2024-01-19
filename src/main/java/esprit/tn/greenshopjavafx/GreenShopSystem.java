@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class imedGreenShopSystem extends Application {
+public class GreenShopSystem extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
