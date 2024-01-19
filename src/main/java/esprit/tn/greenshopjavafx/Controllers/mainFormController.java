@@ -592,7 +592,6 @@ public class mainFormController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        inventory_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
         inventory_col_productName.setCellValueFactory(new PropertyValueFactory<>("nom"));
         inventory_col_prix.setCellValueFactory(new PropertyValueFactory<>("prix"));
         inventory_col_stock.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -981,7 +980,6 @@ public class mainFormController implements Initializable {
 
     //Fournisseur
     private void configureTableViewColumns() {
-        fournisseur_col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         fournisseur_col_nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         fournisseur_col_prenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         fournisseur_col_email.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -1312,6 +1310,8 @@ public class mainFormController implements Initializable {
             successAlert.setHeaderText(null);
             successAlert.setContentText("Le stock a été ajouté avec succès.");
             successAlert.showAndWait();
+            quantiteTextField.clear();
+            categorieComboBox.getSelectionModel().clearSelection();
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
 
@@ -1421,6 +1421,9 @@ public class mainFormController implements Initializable {
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Le stock a été modifié avec succès.");
                 successAlert.showAndWait();
+                // Clear input fields after the update
+                quantiteTextField.clear();
+                categorieComboBox.getSelectionModel().clearSelection();
             } catch (SQLException e) {
                 e.printStackTrace();
 
@@ -1461,7 +1464,22 @@ public class mainFormController implements Initializable {
             categorie selectedCategory = categorieComboBoxSearch.getValue();
 
             // Search by both marque and category or only by marque or only by category
-            ArrayList<Stock> stocksTrouves = serviceStock.chercherProduitParMarqueEtCategorie(marque, selectedCategory);
+            ArrayList<Stock> stocksTrouves = new ArrayList<>();
+
+            if (!marque.isEmpty() && selectedCategory != null) {
+                // Search by both marque and category
+                stocksTrouves = serviceStock.chercherProduitParMarqueEtCategorie(marque, selectedCategory);
+            } else if (!marque.isEmpty()) {
+                // Search only by marque
+                stocksTrouves = serviceStock.chercherProduitParMarque(marque);
+            } else if (selectedCategory != null) {
+                // Search only by category
+                stocksTrouves = serviceStock.chercherProduitParCategorie(String.valueOf(selectedCategory));
+            } else {
+                // No search criteria provided, handle accordingly (e.g., display a message)
+                System.out.println("Veuillez fournir des critères de recherche.");
+                return;
+            }
 
             // Filter the results to include those with a matching category or matching marque
             stocksTrouves = stocksTrouves.stream()
@@ -1473,11 +1491,17 @@ public class mainFormController implements Initializable {
 
             stock_tableView.getItems().clear(); // Clear the current content
             stock_tableView.getItems().addAll(stocksTrouves); // Display the filtered results
+
+            // Clear input fields after the search
+            rechercheMarqueTextField.clear();
+            categorieComboBoxSearch.getSelectionModel().clearSelection();
         } catch (SQLException e) {
             e.printStackTrace();
             // Handle the exception (e.g., display an error message)
         }
     }
+
+
 
 
 
@@ -1661,12 +1685,10 @@ public class mainFormController implements Initializable {
             throw new RuntimeException(e);
         }
         /////////////// Stock form /////////////////////////////////////////////////
-        stock_col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         stock_col_nom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         stock_col_marque.setCellValueFactory(new PropertyValueFactory<>("marque"));
         stock_col_categorie.setCellValueFactory(new PropertyValueFactory<>("categorie"));
         stock_col_prix.setCellValueFactory(new PropertyValueFactory<>("prix"));
-        stock_col_produit_id.setCellValueFactory(new PropertyValueFactory<>("idProduit"));
         stock_col_quantite.setCellValueFactory(new PropertyValueFactory<>("quantite"));
         /////////////// Stock form /////////////////////////////////////////////////
 

@@ -91,14 +91,18 @@ public class ProduitService implements IService<Produit> {
                 int id = resultSet.getInt("id");
                 String nom = resultSet.getString("nom");
                 double prix = resultSet.getDouble("prix");
-                int stock = resultSet.getInt("stock");
+                // Get the quantity value from the current result set
+                int quantity = resultSet.getInt("quantity");
                 String image = resultSet.getString("image");
                 String status = resultSet.getString("status");
-                int quantity = resultSet.getInt("quantity");
+
+                // Fetching the stock value from the stock table
+                int stock = getStockValue(id);
+
                 // Assuming you have methods to fetch Categorie and Marque based on their IDs
                 Marque marque = marqueService.get(resultSet.getInt("marque"));
 
-                Produit p = new Produit(id, nom, prix,stock,image ,status,quantity, marque);
+                Produit p = new Produit(id, nom, prix, stock, image, status, quantity, marque);
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -117,17 +121,33 @@ public class ProduitService implements IService<Produit> {
             if (resultSet.next()) {
                 String nom = resultSet.getString("nom");
                 double prix = resultSet.getDouble("prix");
-                int stock = resultSet.getInt("stock");
+                // Get the quantity value from the current result set
+                int quantity = resultSet.getInt("quantity");
                 String image = resultSet.getString("image");
                 String status = resultSet.getString("status");
-                int quantity = resultSet.getInt("quantity");
+
+                // Fetching the stock value from the stock table
+                int stock = getStockValue(id);
+
                 // Assuming you have methods to fetch Categorie and Marque based on their IDs
                 Marque marque = marqueService.get(resultSet.getInt("marque"));
 
-                return new Produit(id, nom, prix,stock,image ,status,quantity, marque);
+                return new Produit(id, nom, prix, stock, image, status, quantity, marque);
             }
         }
         return null;
+    }
+
+    private int getStockValue(int produitId) throws SQLException {
+        String stockQuery = "SELECT quantite FROM stock WHERE produit_id = ?";
+        try (PreparedStatement stockStatement = con.prepareStatement(stockQuery)) {
+            stockStatement.setInt(1, produitId);
+            ResultSet stockResultSet = stockStatement.executeQuery();
+            if (stockResultSet.next()) {
+                return stockResultSet.getInt("quantite");
+            }
+        }
+        return 0; // Return a default value if stock information is not found
     }
 
     public ArrayList<Produit> getAllProductsByMarqueName(String marqueName) throws SQLException {

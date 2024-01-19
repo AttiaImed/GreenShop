@@ -234,12 +234,10 @@
                                                AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="18.0"
                                                AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="57.0">
                                        <columns>
-                                          <TableColumn fx:id="stock_col_id" prefWidth="75.0" text="ID"/>
                                           <TableColumn fx:id="stock_col_nom" prefWidth="100.0" text="Nom"/>
                                           <TableColumn fx:id="stock_col_marque" prefWidth="100.0" text="Marque"/>
                                           <TableColumn fx:id="stock_col_categorie" prefWidth="100.0" text="Catégorie"/>
                                           <TableColumn fx:id="stock_col_prix" prefWidth="100.0" text="Prix"/>
-                                          <TableColumn fx:id="stock_col_produit_id" prefWidth="75.0" text="Produit ID"/>
                                           <TableColumn fx:id="stock_col_quantite" prefWidth="75.0" text="Quantité"/>
                                        </columns>
                                        <columnResizePolicy>
@@ -249,7 +247,9 @@
                                  </children>
                               </AnchorPane>
                               <!-- Formulaire de modification de stock -->
-                              <AnchorPane fx:id="modifyStockFormPane" layoutX="21.0" layoutY="431.0" prefHeight="150.0" prefWidth="418.0" style="-fx-background-color: rgba(9,135,162,0.85); -fx-border-radius: 10px; -fx-background-radius: 10px;" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="21.0" >
+                              <AnchorPane fx:id="modifyStockFormPane" layoutX="21.0" layoutY="431.0" prefHeight="150.0" prefWidth="836.0"
+                                          style="-fx-background-color: rgba(9,135,162,0.85); -fx-border-radius: 10px; -fx-background-radius: 10px;"
+                                          AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="21.0">
                                  <VBox spacing="10" layoutX="21.0" layoutY="21.0">
                                     <Label text="Modifier Stock" style="-fx-font-size: 16px; -fx-text-fill: #333333;" />
                                     <HBox spacing="10">
@@ -284,7 +284,6 @@
                                  <children>
                                     <TableView fx:id="inventory_tableView" layoutX="18.0" layoutY="16.0" onMouseClicked="#inventorySelectData" prefHeight="254.0" prefWidth="814.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="16.0">
                                        <columns>
-                                          <TableColumn fx:id="inventory_col_productID" prefWidth="75.0" text="Product ID" />
                                           <TableColumn fx:id="inventory_col_productName" prefWidth="126.0" text="Product Name" />
                                           <TableColumn fx:id="inventory_col_prix" prefWidth="128.0" text="Price" />
                                           <TableColumn fx:id="inventory_col_stock" prefWidth="93.0" text="Stock" />
@@ -428,7 +427,6 @@
                                                prefWidth="800.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="14.0"
                                                AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="57.0">
                                        <columns>
-                                          <TableColumn fx:id="fournisseur_col_id" prefWidth="75.0" text="ID"/>
                                           <TableColumn fx:id="fournisseur_col_nom" prefWidth="100.0" text="Nom"/>
                                           <TableColumn fx:id="fournisseur_col_prenom" prefWidth="100.0" text="Prenom"/>
                                           <TableColumn fx:id="fournisseur_col_email" prefWidth="100.0" text="Email"/>
